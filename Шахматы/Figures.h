@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <string>
 
 using namespace std;
@@ -29,7 +28,7 @@ public:
 	Figures(int, int, bool, ChessBoard*);
 	inline bool getColor() { return color; };
 	inline string getName() { return name; };
-	virtual bool move(int, int) { return true; };
+	virtual bool move(int _x, int _y) { return true; };
 	virtual bool checkMove(int, int) const { return true; };
 	void remove(int, int);
 

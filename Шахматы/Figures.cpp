@@ -1,6 +1,6 @@
 #include "Figures.h"
 #include <math.h>
-
+#include <iostream>
 
 Figures::Figures(int _x, int _y, bool _color, ChessBoard * _board)
 {
@@ -49,42 +49,10 @@ bool Pawn::checkMove(int _x, int _y) const
 
 	if (xPos - _x == 0)
 	{
-		if (
-			(
-				color &&
-				(_y - yPos) == 1 &&
-				(
-					board->board[_x][_y] == nullptr ||
-					!board->board[_x][_y]->getColor()
-					)
-				)
-			&& (
-				color &&
-				(_y - yPos) == 2 &&
-				!isMoved &&
-				(
-					board->board[_x][_y] == nullptr ||
-					!board->board[_x][_y]->getColor()
-					)
-				)
-			&& (
-				!color &&
-				(_y - yPos) == -1 &&
-				(
-					board->board[_x][_y] == nullptr ||
-					board->board[_x][_y]->getColor()
-					)
-				)
-			&& (
-				!color &&
-				(_y - yPos) == -2 &&
-				!isMoved &&
-				(
-					board->board[_x][_y] == nullptr ||
-					board->board[_x][_y]->getColor()
-					)
-				)
-			)
+		if ((color && (_y - yPos) == 1 && (board->board[_x][_y] == nullptr || !board->board[_x][_y]->getColor()))
+			|| (color && (_y - yPos) == 2 && !isMoved && (board->board[_x][_y] == nullptr || !board->board[_x][_y]->getColor()))
+			|| (!color && (_y - yPos) == -1 && (board->board[_x][_y] == nullptr || board->board[_x][_y]->getColor()))
+			|| (!color && (_y - yPos) == -2 && !isMoved && (board->board[_x][_y] == nullptr || board->board[_x][_y]->getColor())))
 			return true;
 
 		return false;
@@ -110,7 +78,37 @@ bool Pawn::checkMove(int _x, int _y) const
 
 void Pawn::reborn()
 {
-
+	cout << "Chose figure type:" << endl;
+	cout
+		<< "1. Queen" << endl
+		<< "2. Knight" << endl
+		<< "3. Bishop" << endl
+		<< "4. Castle" << endl
+		<< "0. Pawn" << endl;
+	int i;
+	while (!(cin >> i) && i >= 0 && i < 5)
+	{
+		cin.clear();
+		while (cin.get() != '\n');
+	}
+	switch (i)
+	{
+	case 1:
+		board->board[xPos][yPos] = new Queen(xPos, yPos, color, board);
+		break;
+	case 2:
+		board->board[xPos][yPos] = new Knight(xPos, yPos, color, board);
+		break;
+	case 3:
+		board->board[xPos][yPos] = new Bishop(xPos, yPos, color, board);
+		break;
+	case 4:
+		board->board[xPos][yPos] = new Castle(xPos, yPos, color, board);
+		break;
+	case 0:
+	default:
+		break;
+	}
 }
 
 Knight::Knight(int _x, int _y, bool _color, ChessBoard * _board) : Figures(_x, _y, _color, _board)
@@ -186,9 +184,11 @@ bool Bishop::checkMove(int _x, int _y) const
 	{
 		int dX = abs(_x - xPos) / (_x - xPos);
 		int dY = abs(_y - yPos) / (_y - yPos);
-		int _xPos = xPos;
-		int _yPos = yPos;
-		while (_y != _yPos && board->board[_x][_y] == nullptr)
+
+		int _xPos = xPos + dX;
+		int _yPos = yPos + dY;
+		
+		while (_y != _yPos && board->board[_xPos][_yPos] == nullptr)
 		{
 			_yPos += dY;
 			_xPos += dX;
@@ -226,7 +226,7 @@ bool Castle::checkMove(int _x, int _y) const
 
 	if ((abs(_x - xPos) == 0 && abs(_y - yPos) != 0) || (abs(_x - xPos) != 0 && abs(_y - yPos) == 0))
 	{
-		int dX, dY, _yPos = yPos, _xPos = xPos;
+		int dX, dY, _yPos, _xPos;
 		
 		if (abs(_x - xPos))
 			dX = abs(_x - xPos) / (_x - xPos);
@@ -238,7 +238,10 @@ bool Castle::checkMove(int _x, int _y) const
 		else
 			dY = 0;
 
-		while ((_y != _yPos || _x != _xPos) && board->board[_x][_y] == nullptr)
+		_yPos = yPos + dY;
+		_xPos = xPos + dX;
+
+		while ((_y != _yPos || _x != _xPos) && board->board[_xPos][_yPos] == nullptr)
 		{
 			_yPos += dY;
 			_xPos += dX;
@@ -258,8 +261,13 @@ Queen::Queen(int _x, int _y, bool _color, ChessBoard * _board) : Figures(_x, _y,
 		name = "B_Q";
 }
 
-bool Queen::move(int, int)
+bool Queen::move(int _x, int _y)
 {
+	if (checkMove(_x, _y))
+	{
+		remove(_x, _y);
+		return true;
+	}
 	return false;
 }
 
@@ -272,7 +280,7 @@ bool Queen::checkMove(int _x, int _y) const
 		(abs(_x - xPos) != 0 && abs(_y - yPos) == 0) ||
 		abs(_x - xPos) == abs(_y - yPos))
 	{
-		int dX, dY, _yPos = yPos, _xPos = xPos;
+		int dX, dY, _yPos, _xPos;
 
 		if (abs(_x - xPos))
 			dX = abs(_x - xPos) / (_x - xPos);
@@ -284,7 +292,10 @@ bool Queen::checkMove(int _x, int _y) const
 		else
 			dY = 0;
 
-		while ((_y != _yPos || _x != _xPos) && board->board[_x][_y] == nullptr)
+		_yPos = yPos + dY;
+		_xPos = xPos + dX;
+
+		while ((_y != _yPos || _x != _xPos) && board->board[_xPos][_yPos] == nullptr)
 		{
 			_yPos += dY;
 			_xPos += dX;
