@@ -1,19 +1,37 @@
-#ifndef FIGURES_H
-#define FIGURES_H
+#pragma once
+
 
 #include <string>
-#include "ChessBoard.h"
 
 using namespace std;
+
+
+class Figures;
+
+
+class ChessBoard
+{
+public:
+	ChessBoard();
+	~ChessBoard();
+	void show();
+	Figures* board[8][8];
+	Figures** operator[] (int);
+
+private:
+
+};
+
 
 class Figures
 {
 public:
 	Figures(int, int, bool, ChessBoard*);
-	bool getColor() { return color; };
-	string getName() { return name; };
-	virtual void move(int, int) {};
-	virtual bool checkMove(int, int) {};
+	inline bool getColor() { return color; };
+	inline string getName() { return name; };
+	virtual bool move(int, int) { return true; };
+	virtual bool checkMove(int, int) const { return true; };
+	void remove(int, int);
 
 protected:
 	int xPos;
@@ -28,71 +46,65 @@ class Pawn : public Figures
 {
 public:
 	Pawn(int, int, bool, ChessBoard*);
-	void move(int, int) override;
-	bool checkMove(int, int) override;
+	bool move(int, int) override;
+	bool checkMove(int, int) const override;
 
 private:
-
+	void reborn();
 };
 
 class Knight : public Figures
 {
 public:
 	Knight(int, int, bool, ChessBoard*);
-	~Knight();
-	void move(int, int) override;
-	bool checkMove(int, int) override;
+	bool move(int, int) override;
+	bool checkMove(int, int) const override;
 
 };
 
-class Bishop : public Knight
+class Bishop : public Figures
 {
 public:
-	Bishop();
-	~Bishop();
-	void move(int, int) override;
-	bool checkMove(int, int) override;
+	Bishop(int, int, bool, ChessBoard *);
+	bool move(int, int) override;
+	bool checkMove(int, int) const override;
 
 private:
 
 };
+
 class Castle : public Figures
 {
 
 public:
-	Castle();
-	~Castle();
-	void move(int, int) override;
-	bool checkMove(int, int) override;
+	Castle(int, int, bool, ChessBoard *);
+	bool move(int, int) override;
+	bool checkMove(int, int) const override;
 
 private:
 
 };
 
-class Queen : Figures
+class Queen : public Figures
 {
 public:
-	Queen();
-	~Queen();
-	void move(int, int) override;
-	bool checkMove(int, int) override;
+	Queen(int, int, bool, ChessBoard *);
+	bool move(int, int) override;
+	bool checkMove(int, int) const override;
 
 private:
 
 };
 
-class King : Figures
+class King : public Figures
 {
 public:
-	King();
-	~King();
-	void move(int, int) override;
-	bool checkMove(int, int) override;
+	King(int, int, bool, ChessBoard *);
+	bool move(int, int) override;
+	bool checkMove(int, int) const override;
 
 private:
 
 };
 
 
-
-#endif // !FIGURES_H
