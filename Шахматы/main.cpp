@@ -20,13 +20,13 @@ void PvPGame()
 			<< "Chose figure position(row and column): ";
 		
 		int x, y;
-		while (!(cin >> x >> y) || board.board[x - 1][y - 1] == nullptr || board.board[x - 1][y - 1]->getColor() != whosTurn)
+		while (!(cin >> x >> y) || board[x - 1][y - 1] == nullptr || board[x - 1][y - 1]->getColor() != whosTurn)
 		{
 			cin.clear();
 			while (cin.get() != '\n');
 			cout << "Chose figure position(row and column): ";
 		}
-		currFig = board.board[x - 1][y - 1];
+		currFig = board[x - 1][y - 1];
 
 
 		cout << "Chose position to move(row and column): ";
@@ -45,7 +45,15 @@ void PvPGame()
 int main()
 {
 	PvPGame();
+/*
+	vector<pair<int, int>> a, b;
+	a.push_back(pair<int, int>(5, 6));
+	a.push_back(pair<int, int>(1, 9));
 
+	b.push_back(pair<int, int>(5, 6));
+	b.push_back(pair<int, int>(5, 6));
+	
+	cout << a + b;*/
 	system("pause");
 
 	return 0;
