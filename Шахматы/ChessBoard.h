@@ -2,8 +2,11 @@
 
 #include <vector>
 #include "Figures.h"
+#include "TurnsCounter.h"
 
 using namespace std;
+
+class TurnsCounter;
 
 class Figures;
 
@@ -31,4 +34,6 @@ private:
 	bool playerColor;
 
 	vector<Figures*> figures;
+
+	TurnsCounter turnsCounter;
 };

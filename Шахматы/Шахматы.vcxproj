@@ -119,11 +119,13 @@
     <ClCompile Include="ChessBoard.cpp" />
     <ClCompile Include="Figures.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TurnsCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIplayer.h" />
     <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="Figures.h" />
+    <ClInclude Include="TurnsCounter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

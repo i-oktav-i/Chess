@@ -44,6 +44,7 @@ void PvPGame()
 
 int main()
 {
+
 	PvPGame();
 /*
 	vector<pair<int, int>> a, b;
