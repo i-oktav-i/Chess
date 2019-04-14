@@ -34,7 +34,16 @@ bool Figures::move(int _x, int _y)
 	return false;
 }
 
-vector<pair<int, int>>& Figures::getEatFigureMoves()
+vector<pair<int, int> >& Figures::getPosibleMoves() const
+{
+	vector<pair<int, int> > moves;
+	for (int x = 0; x < 8; ++x)
+		for (int y = 0; y < 8; ++y)
+			if (checkMove(x, y))
+				moves.push_back(pair<int, int>(x, y));
+}
+
+vector<pair<int, int>>& Figures::getEatPieceMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (auto i : getPosibleMoves())
@@ -47,23 +56,19 @@ vector<pair<int, int>>& Figures::getEatFigureMoves()
 
 bool Figures::isInDanger()
 {
-	for (auto i : board.getFigures())
-	{
-		if (i->checkMove(xPos, yPos))
-			return true;
-	}
+	for (int x = 0; x < 8; ++x)
+		for (int y = 0; y < 8; ++y)
+			if (board[x][y] != nullptr && board[x][y]->checkMove(xPos, yPos))
+				return true;
 	return false;
 }
 
 bool Figures::isInDanger(int _x, int _y)
 {
-
-	for (auto i : board.getFigures())
-	{
-		if (i->getColor() != color && i->checkMove(_x, _y))
-			return true;
-	}
-
+	for (int x = 0; x < 8; ++x)
+		for (int y = 0; y < 8; ++y)
+			if (board[x][y] != nullptr && board[x][y]->checkMove(_x, _y))
+				return true;
 	return false;
 }
 
@@ -104,9 +109,6 @@ bool Pawn::move(int _x, int _y)
 
 bool Pawn::checkMove(int _x, int _y) const
 {
-
-	//return (_x >= 0 && _x < 8 && _y >= 0 && _y < 8) && (((xPos == _x && ((color && (_y - yPos) == 1 && (board[_x][_y] == nullptr || !board[_x][_y]->getColor())) || (color && (_y - yPos) == 2 && !isMoved && (board[_x][_y] == nullptr || !board[_x][_y]->getColor())) || (!color && (_y - yPos) == -1 && (board[_x][_y] == nullptr || board[_x][_y]->getColor())) || (!color && (_y - yPos) == -2 && !isMoved && (board[_x][_y] == nullptr || board[_x][_y]->getColor()))))) || ((_x - xPos == 1 && ((color && _y - yPos == 1) || (!color && _y - xPos == -1))) && (_x - xPos == -1 && ((color && _y - yPos == 1) || (!color && _y - yPos == -1)))));
-
 	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
@@ -133,45 +135,10 @@ bool Pawn::checkMove(int _x, int _y) const
 					return true;
 		}
 	}
-
 	return false;
-		/*(
-			(color && (_y - yPos) > 0 && (_y - yPos) < 3) || 
-			(!color && (yPos - _y) > 0 && (yPos - _y) < 3)
-		) &&
-		(board[_x][_y] == nullptr || board[_x][_y]->getColor() != color))
-*/
-
-	/*if (xPos - _x == 0)
-	{
-		if ((color && (_y - yPos) == 1 && (board[_x][_y] == nullptr || !board[_x][_y]->getColor()))
-			|| (color && (_y - yPos) == 2 && !isMoved && (board[_x][_y] == nullptr || !board[_x][_y]->getColor()))
-			|| (!color && (_y - yPos) == -1 && (board[_x][_y] == nullptr || board[_x][_y]->getColor()))
-			|| (!color && (_y - yPos) == -2 && !isMoved && (board[_x][_y] == nullptr || board[_x][_y]->getColor())))
-			return true;
-
-		return false;
-	}
-	else if (
-		(
-			_x - xPos == 1 && (
-			(color && _y - yPos == 1) ||
-				(!color && _y - yPos == -1)
-				)
-			)
-		&& (
-			_x - xPos == -1 && (
-			(color && _y - yPos == 1) ||
-				(!color && _y - yPos == -1)
-				)
-			)
-		)
-		return true;
-
-	return false;*/
 }
 
-vector<pair<int, int>> & Pawn::getPosibleMoves()
+vector<pair<int, int>> & Pawn::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 3; ++i)
@@ -198,8 +165,7 @@ void Pawn::reborn()
 		<< "1. Queen" << endl
 		<< "2. Knight" << endl
 		<< "3. Bishop" << endl
-		<< "4. Castle" << endl
-		<< "0. Pawn" << endl;
+		<< "4. Castle" << endl;
 	int i;
 	while (!(cin >> i) && i >= 0 && i < 5)
 	{
@@ -220,7 +186,6 @@ void Pawn::reborn()
 	case 4:
 		board[xPos][yPos] = new Castle(xPos, yPos, PRIORITY_CASTLE, color, board, turnsCounter);
 		break;
-	case 0:
 	default:
 		break;
 	}
@@ -234,44 +199,27 @@ Knight::Knight(int _x, int _y, int _priority, bool _color, ChessBoard& _board, T
 		name = "B_H";
 }
 
-bool Knight::move(int _x, int _y)
+/*bool Knight::move(int _x, int _y)
 {
-	if (checkMove(_x, _y))
-	{
-		setPos(_x, _y);
+	if (Figures::move(_x, _y))
 		return true;
-	}
-
 	return false;
-}
+}*/
 
 bool Knight::checkMove(int _x, int _y) const
 {
 	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
-	if (
-		(
-			abs(_x - xPos) == 2 &&
-			abs(_y - yPos) == 1 && (
-				board[_x][_y] == nullptr ||
-				board[_x][_y]->getColor() != color
-				)
-			)
-		|| (
-			abs(_x - xPos) == 1 &&
-			abs(_y - yPos) == 2 && (
-				board[_x][_y] == nullptr ||
-				board[_x][_y]->getColor() != color
-				)
-			)
-		)
+	if ((abs(_x - xPos == 2) && abs(_y - yPos == 1) ||
+		abs(_y - yPos == 2) && abs(_x - xPos == 1))
+		&& (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color))
 		return true;
 
 	return false;
 }
 
-vector<pair<int, int>> & Knight::getPosibleMoves()
+vector<pair<int, int>> & Knight::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 
@@ -310,16 +258,12 @@ Bishop::Bishop(int _x, int _y, int _priority, bool _color, ChessBoard & _board, 
 		name = "B_B";
 }
 
-bool Bishop::move(int _x, int _y)
+/*bool Bishop::move(int _x, int _y)
 {
-	if (checkMove(_x, _y))
-	{
-		setPos(_x, _y);
+	if (Figures::move(_x, _y))
 		return true;
-	}
-
 	return false;
-}
+}*/
 
 bool Bishop::checkMove(int _x, int _y) const
 {
@@ -346,7 +290,7 @@ bool Bishop::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Bishop::getPosibleMoves()
+vector<pair<int, int>>& Bishop::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 8; ++i)
@@ -420,7 +364,7 @@ bool Castle::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Castle::getPosibleMoves()
+vector<pair<int, int>>& Castle::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 8; ++i)
@@ -491,7 +435,7 @@ bool Queen::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Queen::getPosibleMoves()
+vector<pair<int, int>>& Queen::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 8; ++i)
@@ -558,7 +502,7 @@ bool King::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& King::getPosibleMoves()
+vector<pair<int, int>>& King::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;	
 

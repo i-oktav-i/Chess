@@ -18,7 +18,7 @@ void AIPlayer::takeTurn()
 
 	for (auto i : killFiguresFigures)
 	{
-		auto eatFigureMoves = i->getEatFigureMoves();
+		auto eatFigureMoves = i->getEatPieceMoves();
 
 	}
 }
@@ -67,7 +67,7 @@ vector<Figures*>& AIPlayer::getKillFiguresFigures()
 
 	for (auto i : board.getFigures())
 	{
-		if (i->getColor() == playerColor && i->getEatFigureMoves().size() != 0)
+		if (i->getColor() == playerColor && i->getEatPieceMoves().size() != 0)
 			killFiguresFigures.push_back(i);
 	}
 

@@ -38,9 +38,9 @@ public:
 
 	virtual bool checkMove(int, int) const = 0;
 	
-	virtual vector<pair<int, int> >& getPosibleMoves() = 0;
+	virtual vector<pair<int, int> >& getPosibleMoves() const;
 
-	vector<pair<int, int> >& getEatFigureMoves();
+	vector<pair<int, int> >& getEatPieceMoves() const;
 
 	bool isInDanger();
 
@@ -78,7 +78,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() override;
+	vector<pair<int, int> >& getPosibleMoves() const override;
 
 private:
 
@@ -92,10 +92,10 @@ class Knight : public Figures
 public:
 
 	Knight(int, int, int, bool, ChessBoard&, TurnsCounter&);
-	bool move(int, int) override;
+	//bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() override;
+	vector<pair<int, int> >& getPosibleMoves() const override;
 
 };
 
@@ -108,7 +108,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() override;
+	vector<pair<int, int> >& getPosibleMoves() const override;
 
 };
 
@@ -121,7 +121,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() override;
+	vector<pair<int, int> >& getPosibleMoves() const override;
 
 };
 
@@ -134,7 +134,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() override;
+	vector<pair<int, int> >& getPosibleMoves() const override;
 
 };
 
@@ -147,7 +147,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() override;
+	vector<pair<int, int> >& getPosibleMoves() const override;
 
 	bool isCheck(int, int) const;
 	bool isCheckmate();
