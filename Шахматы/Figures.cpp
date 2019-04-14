@@ -28,6 +28,7 @@ bool Figures::move(int _x, int _y)
 		setPos(_x, _y);
 		++turnsCounter;
 		turnOfLastMove = turnsCounter.getCount();
+		++movesCounter;
 		return true;
 	}
 	return false;
@@ -89,6 +90,13 @@ bool Pawn::move(int _x, int _y)
 	{
 		if (yPos == 7 || yPos == 0)
 			reborn();
+		
+		if (color && yPos == 5 && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
+			board[xPos][4] = nullptr;
+
+		if (!color && yPos == 2 && board[xPos][3]->getName() == "W_P" && board[xPos][3]->getMovesCounter() == 1)
+			board[xPos][3] = nullptr;
+		
 		return true;
 	}
 	return false;
@@ -97,13 +105,44 @@ bool Pawn::move(int _x, int _y)
 bool Pawn::checkMove(int _x, int _y) const
 {
 
-	return (_x >= 0 && _x < 8 && _y >= 0 && _y < 8) && (((xPos == _x && ((color && (_y - yPos) == 1 && (board[_x][_y] == nullptr || !board[_x][_y]->getColor()))
-		|| (color && (_y - yPos) == 2 && !isMoved && (board[_x][_y] == nullptr || !board[_x][_y]->getColor())) || (!color && (_y - yPos) == -1 && (board[_x][_y] == nullptr || board[_x][_y]->getColor())) || (!color && (_y - yPos) == -2 && !isMoved && (board[_x][_y] == nullptr || board[_x][_y]->getColor()))))) || ((_x - xPos == 1 && ((color && _y - yPos == 1) || (!color && _y - xPos == -1))) && (_x - xPos == -1 && ((color && _y - yPos == 1) || (!color && _y - yPos == -1)))));
+	//return (_x >= 0 && _x < 8 && _y >= 0 && _y < 8) && (((xPos == _x && ((color && (_y - yPos) == 1 && (board[_x][_y] == nullptr || !board[_x][_y]->getColor())) || (color && (_y - yPos) == 2 && !isMoved && (board[_x][_y] == nullptr || !board[_x][_y]->getColor())) || (!color && (_y - yPos) == -1 && (board[_x][_y] == nullptr || board[_x][_y]->getColor())) || (!color && (_y - yPos) == -2 && !isMoved && (board[_x][_y] == nullptr || board[_x][_y]->getColor()))))) || ((_x - xPos == 1 && ((color && _y - yPos == 1) || (!color && _y - xPos == -1))) && (_x - xPos == -1 && ((color && _y - yPos == 1) || (!color && _y - yPos == -1)))));
 
-	/*if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
-	if (xPos - _x == 0)
+	if (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color)
+	{
+		if (_x == xPos)
+		{
+			if ((color && (_y - yPos) == 1) || (!color && (yPos - _y) == 1) ||
+				(!isMoved && (color && (_y - yPos) == 2) || (!color && (yPos - _y) == 2)))
+				return true;
+		}
+		if ((_x - xPos == 1 || xPos - _x == 1) && 
+			(color && (_y - yPos) == 1) || (!color && (yPos - _y) == 1))
+		{
+			if (board[_x][_y] == nullptr)
+			{
+				if (((color && yPos == 4 && board[_x][yPos]->getName() == "B_P") ||
+					(!color && yPos == 3 && board[_x][yPos]->getName() == "W_P")) &&
+					board[_x][yPos]->getTurnOfLastMove() == turnsCounter.getCount() &&
+					board[_x][yPos]->getMovesCounter() == 1)
+					return true;
+			}
+			else if(board[_x][_y]->getColor() != color)
+					return true;
+		}
+	}
+
+	return false;
+		/*(
+			(color && (_y - yPos) > 0 && (_y - yPos) < 3) || 
+			(!color && (yPos - _y) > 0 && (yPos - _y) < 3)
+		) &&
+		(board[_x][_y] == nullptr || board[_x][_y]->getColor() != color))
+*/
+
+	/*if (xPos - _x == 0)
 	{
 		if ((color && (_y - yPos) == 1 && (board[_x][_y] == nullptr || !board[_x][_y]->getColor()))
 			|| (color && (_y - yPos) == 2 && !isMoved && (board[_x][_y] == nullptr || !board[_x][_y]->getColor()))

@@ -18,17 +18,21 @@ class Figures
 
 public:
 
-	pair<int, int> getPos() { return pair<int, int>(xPos, yPos); }
+	pair<int, int> getPos() const { return pair<int, int>(xPos, yPos); }
 
-	bool getColor() { return color; };
+	bool getColor() const { return color; };
 	
-	string getName() { return name; };
+	string getName() const { return name; };
 	
-	int getPriority() { return priority; }
+	int getPriority() const { return priority; }
 
-	bool getIsDead() { return isDead; }
+	bool getIsDead() const { return isDead; }
 
-	bool getIsMoved() { return isMoved; }
+	bool getIsMoved() const { return isMoved; }
+
+	int getTurnOfLastMove() const { return turnOfLastMove; }
+
+	int getMovesCounter() const { return movesCounter; }
 
 	virtual bool move(int, int);
 
@@ -60,6 +64,7 @@ protected:
 	string name;
 	ChessBoard& board;
 	int turnOfLastMove = 0;
+	int movesCounter = 0;
 	TurnsCounter& turnsCounter;
 
 };

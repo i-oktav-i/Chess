@@ -14,6 +14,8 @@ ChessBoard::ChessBoard()
 {
 	board = new Figures**[8];
 
+	playerColor = true;
+
 	for (int i = 0; i < 8; ++i)
 	{
 		board[i] = new Figures*[8];
