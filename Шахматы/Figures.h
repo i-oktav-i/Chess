@@ -22,7 +22,7 @@ public:
 
 	bool getColor() const { return color; };
 	
-	string getName() const { return name; };
+ 	string getName() const { return name; };
 	
 	int getPriority() const { return priority; }
 
@@ -42,9 +42,9 @@ public:
 
 	vector<pair<int, int> >& getEatPieceMoves() const;
 
-	bool isInDanger();
+	bool isInDanger() const;
 
-	bool isInDanger(int, int);
+	bool isInDanger(int, int) const;
 
 protected:
 
@@ -56,7 +56,6 @@ protected:
 	int yPos;
 
 	int priority;
-	//pair<int, int> pos;
 
 	bool color;
 	bool isMoved = false;
@@ -92,7 +91,6 @@ class Knight : public Figures
 public:
 
 	Knight(int, int, int, bool, ChessBoard&, TurnsCounter&);
-	//bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
 	vector<pair<int, int> >& getPosibleMoves() const override;
@@ -105,7 +103,6 @@ class Bishop : public Figures
 public:
 
 	Bishop(int, int, int, bool, ChessBoard&, TurnsCounter&);
-	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
 	vector<pair<int, int> >& getPosibleMoves() const override;
@@ -118,7 +115,6 @@ class Castle : public Figures
 public:
 
 	Castle(int, int, int, bool, ChessBoard&, TurnsCounter&);
-	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
 	vector<pair<int, int> >& getPosibleMoves() const override;
@@ -131,7 +127,6 @@ class Queen : public Figures
 public:
 
 	Queen(int, int, int, bool, ChessBoard&, TurnsCounter&);
-	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
 	vector<pair<int, int> >& getPosibleMoves() const override;
@@ -150,6 +145,9 @@ public:
 	vector<pair<int, int> >& getPosibleMoves() const override;
 
 	bool isCheck(int, int) const;
-	bool isCheckmate();
+	bool isCheckmate() const;
+
+	bool longRoque() const;
+	bool shortRoque() const;
 
 };

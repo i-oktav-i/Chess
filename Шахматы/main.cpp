@@ -20,7 +20,7 @@ void PvPGame()
 			<< "Chose figure position(row and column): ";
 		
 		int x, y;
-		while (!(cin >> x >> y) || board[x - 1][y - 1] == nullptr || board[x - 1][y - 1]->getColor() != whosTurn)
+		while (!(cin >> x >> y) || x < 0 || x > 7 || y < 0 || y > 7 || board[x - 1][y - 1] == nullptr || board[x - 1][y - 1]->getColor() != whosTurn)
 		{
 			cin.clear();
 			while (cin.get() != '\n');

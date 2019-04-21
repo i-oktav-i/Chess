@@ -41,6 +41,8 @@ vector<pair<int, int> >& Figures::getPosibleMoves() const
 		for (int y = 0; y < 8; ++y)
 			if (checkMove(x, y))
 				moves.push_back(pair<int, int>(x, y));
+
+	return moves;
 }
 
 vector<pair<int, int>>& Figures::getEatPieceMoves() const
@@ -54,7 +56,7 @@ vector<pair<int, int>>& Figures::getEatPieceMoves() const
 	return moves;
 }
 
-bool Figures::isInDanger()
+bool Figures::isInDanger() const 
 {
 	for (int x = 0; x < 8; ++x)
 		for (int y = 0; y < 8; ++y)
@@ -63,11 +65,11 @@ bool Figures::isInDanger()
 	return false;
 }
 
-bool Figures::isInDanger(int _x, int _y)
+bool Figures::isInDanger(int _x, int _y) const
 {
 	for (int x = 0; x < 8; ++x)
 		for (int y = 0; y < 8; ++y)
-			if (board[x][y] != nullptr && board[x][y]->checkMove(_x, _y))
+			if (board[x][y] != nullptr && board[x][y]->getColor() != color && board[x][y] != this && board[x][y]->checkMove(_x, _y))
 				return true;
 	return false;
 }
@@ -109,7 +111,7 @@ bool Pawn::move(int _x, int _y)
 
 bool Pawn::checkMove(int _x, int _y) const
 {
-	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
 	if (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color)
@@ -199,22 +201,15 @@ Knight::Knight(int _x, int _y, int _priority, bool _color, ChessBoard& _board, T
 		name = "B_H";
 }
 
-/*bool Knight::move(int _x, int _y)
-{
-	if (Figures::move(_x, _y))
-		return true;
-	return false;
-}*/
 
 bool Knight::checkMove(int _x, int _y) const
 {
-	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
-	if ((abs(_x - xPos == 2) && abs(_y - yPos == 1) ||
-		abs(_y - yPos == 2) && abs(_x - xPos == 1))
-		&& (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color))
-		return true;
+	if (abs(_x - xPos) == 2 && abs(_y - yPos) == 1 || abs(_y - yPos) == 2 && abs(_x - xPos) == 1)
+		if (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color)
+			return true;
 
 	return false;
 }
@@ -258,20 +253,14 @@ Bishop::Bishop(int _x, int _y, int _priority, bool _color, ChessBoard & _board, 
 		name = "B_B";
 }
 
-/*bool Bishop::move(int _x, int _y)
-{
-	if (Figures::move(_x, _y))
-		return true;
-	return false;
-}*/
-
 bool Bishop::checkMove(int _x, int _y) const
 {
-	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
 	if (abs(_x - xPos) == abs(_y - yPos))
 	{
+
 		int dX = abs(_x - xPos) / (_x - xPos);
 		int dY = abs(_y - yPos) / (_y - yPos);
 
@@ -319,20 +308,9 @@ Castle::Castle(int _x, int _y, int _priority, bool _color, ChessBoard & _board, 
 		name = "B_C";
 }
 
-bool Castle::move(int _x, int _y)
-{
-	if (checkMove(_x, _y))
-	{
-		setPos(_x, _y);
-		return true;
-	}
-
-	return false;
-}
-
 bool Castle::checkMove(int _x, int _y) const
 {
-	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
 	if ((abs(_x - xPos) == 0 && abs(_y - yPos) != 0) || (abs(_x - xPos) != 0 && abs(_y - yPos) == 0))
@@ -389,19 +367,9 @@ Queen::Queen(int _x, int _y, int _priority, bool _color, ChessBoard & _board, Tu
 		name = "B_Q";
 }
 
-bool Queen::move(int _x, int _y)
-{
-	if (checkMove(_x, _y))
-	{
-		setPos(_x, _y);
-		return true;
-	}
-	return false;
-}
-
 bool Queen::checkMove(int _x, int _y) const
 {
-	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
 	if ((abs(_x - xPos) == 0 && abs(_y - yPos) != 0) ||
@@ -477,9 +445,19 @@ King::King(int _x, int _y, int _priority, bool _color, ChessBoard & _board, Turn
 
 bool King::move(int _x, int _y)
 {
-	if (checkMove(_x, _y))
+	if (Figures::move(_x, _y))
 	{
-		setPos(_x, _y);
+		if (xPos == 2 && (yPos == 0 || yPos == 7) && movesCounter == 1)
+		{
+			board[3][yPos] = board[0][yPos];
+			board[0][yPos] = nullptr;
+		}
+		if (xPos == 6 && (yPos == 0 || yPos == 7) && movesCounter == 1)
+		{
+			board[5][yPos] = board[7][yPos];
+			board[7][yPos] = nullptr;
+		}
+
 		return true;
 	}
 
@@ -488,15 +466,18 @@ bool King::move(int _x, int _y)
 
 bool King::checkMove(int _x, int _y) const
 {
-	if (_x >= 8 || _x < 0 || _y >= 8 || _y < 0)
+	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
 	if (
 		abs(_x - xPos) <= 1 && abs(_y - yPos) <= 1 && (
 			board[_x][_y] == nullptr || board[_x][_y]->getColor() != color &&
-			!this->isCheck(_x, _y)
+			!isCheck(_x, _y)
 			)
 		)
+		return true;
+
+	if ((_x == 2 && longRoque() || _x == 6 && shortRoque()) && (_y == 0 || _y == 7))
 		return true;
 
 	return false;
@@ -535,18 +516,18 @@ vector<pair<int, int>>& King::getPosibleMoves() const
 
 bool King::isCheck(int _x, int _y) const
 {
-	for (auto i : board.getFigures())
+	/*for (auto i : board.getFigures())
 	{
 		if (i->getColor() != color && !i->getIsDead() && i->checkMove(_x, _y))
 			return true;
 	}
-
+*/
 	return false;
 }
 
-bool King::isCheckmate()
+bool King::isCheckmate() const 
 {
-	auto moves = getPosibleMoves();
+	/*auto moves = getPosibleMoves();
 
 	if (isCheck(xPos, yPos))
 	{
@@ -556,6 +537,38 @@ bool King::isCheckmate()
 				return false;
 		}
 	}
-	
+	*/
 	return false;
 }
+
+bool King::longRoque() const
+{
+	if(turnOfLastMove)
+		return false;
+
+	if (color && board[0][0] != nullptr && board[0][0]->getName() == "W_C" && !board[0][0]->getTurnOfLastMove())
+		if (board[1][0] == nullptr && board[2][0] == nullptr && board[3][0] == nullptr && !isInDanger(2, 0))
+			return true;
+	if (!color && board[0][7] != nullptr && board[0][7]->getName() == "B_C" && !board[0][7]->getTurnOfLastMove())
+		if (board[1][7] == nullptr && board[2][7] == nullptr && board[3][7] == nullptr && !isInDanger(2, 7))
+			return true;
+
+	return false;
+}
+
+bool King::shortRoque() const
+{
+	if (turnOfLastMove)
+		return false;
+
+	if (color && board[7][0] != nullptr && board[7][0]->getName() == "W_C" && !board[7][0]->getTurnOfLastMove())
+		if (board[5][0] == nullptr && board[6][0] == nullptr && !isInDanger(6, 0))
+			return true;
+
+	if (!color && board[7][7] != nullptr && board[7][7]->getName() == "B_C" && !board[7][7]->getTurnOfLastMove())
+		if (board[5][7] == nullptr && board[6][7] == nullptr && !isInDanger(6, 7))
+			return true;
+
+	return false;
+}
+
