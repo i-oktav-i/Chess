@@ -98,10 +98,10 @@ bool Pawn::move(int _x, int _y)
 		if (yPos == 7 || yPos == 0)
 			reborn();
 		
-		if (color && yPos == 5 && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
+		if (color && yPos == 5 && board[xPos][4] != nullptr && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
 			board[xPos][4] = nullptr;
 
-		if (!color && yPos == 2 && board[xPos][3]->getName() == "W_P" && board[xPos][3]->getMovesCounter() == 1)
+		if (!color && yPos == 2 && board[xPos][3] != nullptr && board[xPos][3]->getName() == "W_P" && board[xPos][3]->getMovesCounter() == 1)
 			board[xPos][3] = nullptr;
 		
 		return true;
@@ -469,12 +469,7 @@ bool King::checkMove(int _x, int _y) const
 	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
-	if (
-		abs(_x - xPos) <= 1 && abs(_y - yPos) <= 1 && (
-			board[_x][_y] == nullptr || board[_x][_y]->getColor() != color &&
-			!isCheck(_x, _y)
-			)
-		)
+	if (abs(_x - xPos) <= 1 && abs(_y - yPos) <= 1 && (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color) && !isInDanger(_x, _y))
 		return true;
 
 	if ((_x == 2 && longRoque() || _x == 6 && shortRoque()) && (_y == 0 || _y == 7))

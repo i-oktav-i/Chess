@@ -28,27 +28,31 @@ ChessBoard::ChessBoard()
 		board[i][1] = new Pawn(i, 1, PRIORITY_PAWN, true, *this, turnsCounter);
 		board[i][6] = new Pawn(i, 6, PRIORITY_PAWN, false, *this, turnsCounter);
 	}
+	{
+		board[0][0] = new Castle(0, 0, PRIORITY_CASTLE, true, *this, turnsCounter);
+		board[7][0] = new Castle(7, 0, PRIORITY_CASTLE, true, *this, turnsCounter);
+		board[0][7] = new Castle(0, 7, PRIORITY_CASTLE, false, *this, turnsCounter);
+		board[7][7] = new Castle(7, 7, PRIORITY_CASTLE, false, *this, turnsCounter);
 
-	board[0][0] = new Castle(0, 0, PRIORITY_CASTLE, true, *this, turnsCounter);
-	board[7][0] = new Castle(7, 0, PRIORITY_CASTLE, true, *this, turnsCounter);
-	board[0][7] = new Castle(0, 7, PRIORITY_CASTLE, false, *this, turnsCounter);
-	board[7][7] = new Castle(7, 7, PRIORITY_CASTLE, false, *this, turnsCounter);
+		board[1][0] = new Knight(1, 0, PRIORITY_KNIGHT, true, *this, turnsCounter);
+		board[6][0] = new Knight(6, 0, PRIORITY_KNIGHT, true, *this, turnsCounter);
+		board[1][7] = new Knight(1, 7, PRIORITY_KNIGHT, false, *this, turnsCounter);
+		board[6][7] = new Knight(6, 7, PRIORITY_KNIGHT, false, *this, turnsCounter);
 
-	board[1][0] = new Knight(1, 0, PRIORITY_KNIGHT, true, *this, turnsCounter);
-	board[6][0] = new Knight(6, 0, PRIORITY_KNIGHT, true, *this, turnsCounter);
-	board[1][7] = new Knight(1, 7, PRIORITY_KNIGHT, false, *this, turnsCounter);
-	board[6][7] = new Knight(6, 7, PRIORITY_KNIGHT, false, *this, turnsCounter);
+		board[2][0] = new Bishop(2, 0, PRIORITY_BISHOP, true, *this, turnsCounter);
+		board[5][0] = new Bishop(5, 0, PRIORITY_BISHOP, true, *this, turnsCounter);
+		board[2][7] = new Bishop(2, 7, PRIORITY_BISHOP, false, *this, turnsCounter);
+		board[5][7] = new Bishop(5, 7, PRIORITY_BISHOP, false, *this, turnsCounter);
 
-	board[2][0] = new Bishop(2, 0, PRIORITY_BISHOP, true, *this, turnsCounter);
-	board[5][0] = new Bishop(5, 0, PRIORITY_BISHOP, true, *this, turnsCounter);
-	board[2][7] = new Bishop(2, 7, PRIORITY_BISHOP, false, *this, turnsCounter);
-	board[5][7] = new Bishop(5, 7, PRIORITY_BISHOP, false, *this, turnsCounter);
+		board[3][0] = new Queen(3, 0, PRIORITY_QUEEN, true, *this, turnsCounter);
+		board[3][7] = new Queen(3, 7, PRIORITY_QUEEN, false, *this, turnsCounter);
 
-	board[3][0] = new Queen(3, 0, PRIORITY_QUEEN, true, *this, turnsCounter);
-	board[3][7] = new Queen(3, 7, PRIORITY_QUEEN, false, *this, turnsCounter);
+		board[4][0] = new King(4, 0, PRIORITY_KING, true, *this, turnsCounter);
+		board[4][7] = new King(4, 7, PRIORITY_KING, false, *this, turnsCounter);
+	}
 
-	board[4][0] = new King(4, 0, PRIORITY_KING, true, *this, turnsCounter);
-	board[4][7] = new King(4, 7, PRIORITY_KING, false, *this, turnsCounter);
+	whiteKing = board[4][0];
+	blackKing = board[4][7];
 
 	for (int i = 0; i < 8; ++i)
 	{
@@ -59,11 +63,28 @@ ChessBoard::ChessBoard()
 	}
 }
 
+ChessBoard::ChessBoard(const ChessBoard& _other)
+{
+	board = new Figures * *[8];
+	playerColor = _other.playerColor;
+	for (int i = 0; i < 8; ++i)
+	{
+		for (int j = 0; i < 8; ++j)
+		{
+
+		}
+	}
+}
+
 ChessBoard::~ChessBoard()
 {
 	for (int i = 0; i < 8; ++i)
+	{
 		for (int j = 0; j < 8; ++j)
 			delete board[i][j];
+		delete[] board[i];
+	}
+	delete[] board;
 }
 
 void ChessBoard::show() const

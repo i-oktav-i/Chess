@@ -16,6 +16,8 @@ public:
 
 	ChessBoard();
 
+	ChessBoard(const ChessBoard&);
+
 	~ChessBoard();
 
 	void show() const;
@@ -36,4 +38,7 @@ private:
 	vector<Figures*> figures;
 
 	TurnsCounter turnsCounter;
+
+	Figures *whiteKing, *blackKing;
+
 };

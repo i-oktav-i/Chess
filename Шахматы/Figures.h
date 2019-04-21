@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ChessBoard.h"
+#include "TurnsCounter.h"
 #include <string>
 #include <vector>
 #include <utility>
@@ -45,6 +46,8 @@ public:
 	bool isInDanger() const;
 
 	bool isInDanger(int, int) const;
+
+	int getTurnNumber() const { return turnsCounter.getCount(); }
 
 protected:
 

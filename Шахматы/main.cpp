@@ -17,28 +17,28 @@ void PvPGame()
 		system("cls");
 		board.show();
 		cout << endl
-			<< "Chose figure position(row and column): ";
+			<< "Chose figure position(column and row): ";
 		
 		int x, y;
 		while (!(cin >> x >> y) || x < 0 || x > 7 || y < 0 || y > 7 || board[x - 1][y - 1] == nullptr || board[x - 1][y - 1]->getColor() != whosTurn)
 		{
 			cin.clear();
 			while (cin.get() != '\n');
-			cout << "Chose figure position(row and column): ";
+			cout << "Chose figure position(column and row): ";
 		}
 		currFig = board[x - 1][y - 1];
 
 
-		cout << "Chose position to move(row and column): ";
+		cout << "Chose position to move(column and row): ";
 
-		while (!(cin >> x >> y) || !currFig->move(x - 1, y - 1))
+		while (!(cin >> x >> y))
 		{
 			cin.clear();
 			while (cin.get() != '\n');
-			cout << "Chose position to move(row and column): ";
+			cout << "Chose position to move(column and row): ";
 		}
-
-		whosTurn = !whosTurn;
+		if (currFig->move(x - 1, y - 1))
+			whosTurn = !whosTurn;
 	}
 }
 
@@ -46,15 +46,7 @@ int main()
 {
 
 	PvPGame();
-/*
-	vector<pair<int, int>> a, b;
-	a.push_back(pair<int, int>(5, 6));
-	a.push_back(pair<int, int>(1, 9));
 
-	b.push_back(pair<int, int>(5, 6));
-	b.push_back(pair<int, int>(5, 6));
-	
-	cout << a + b;*/
 	system("pause");
 
 	return 0;
