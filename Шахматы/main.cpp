@@ -12,33 +12,54 @@ void PvPGame()
 
 	Figures* currFig;
 	
-	while (true)
+	bool flag = true;
+
+	while (flag)
 	{
+
 		system("cls");
-		board.show();
-		cout << endl
+
+		if ((whosTurn && board.getWhiteKing()->havePossibleMoves()) || (!whosTurn && board.getBlackKing()->havePossibleMoves()))
+		{
+			board.show();
+			cout << endl
 			<< "Chose figure position(column and row): ";
-		
-		int x, y;
-		while (!(cin >> x >> y) || x < 0 || x > 7 || y < 0 || y > 7 || board[x - 1][y - 1] == nullptr || board[x - 1][y - 1]->getColor() != whosTurn)
-		{
-			cin.clear();
-			while (cin.get() != '\n');
-			cout << "Chose figure position(column and row): ";
-		}
-		currFig = board[x - 1][y - 1];
+
+			int x, y;
+			while (!(cin >> x >> y) || x < 1 || x > 8 || y < 1 || y > 8 || board[x - 1][y - 1] == nullptr || board[x - 1][y - 1]->getColor() != whosTurn)
+			{
+				cin.clear();
+				while (cin.get() != '\n');
+				cout << "Chose figure position(column and row): ";
+			}
+			currFig = board[x - 1][y - 1];
 
 
-		cout << "Chose position to move(column and row): ";
-
-		while (!(cin >> x >> y))
-		{
-			cin.clear();
-			while (cin.get() != '\n');
 			cout << "Chose position to move(column and row): ";
+
+			while (!(cin >> x >> y))
+			{
+				cin.clear();
+				while (cin.get() != '\n');
+				cout << "Chose position to move(column and row): ";
+			}
+			if (currFig->move(x - 1, y - 1))
+				whosTurn = !whosTurn;
 		}
-		if (currFig->move(x - 1, y - 1))
-			whosTurn = !whosTurn;
+		else
+		{
+			if ((whosTurn && board.getWhiteKing()->isInDanger()) || (!whosTurn && board.getBlackKing()->isInDanger()))
+			{
+				if (whosTurn)
+					cout << "Black ";
+				else
+					cout << "White ";
+				cout << "player win" << endl;
+			}
+			else
+				cout << "DRAW";
+			flag = false;
+		}
 	}
 }
 

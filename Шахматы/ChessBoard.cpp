@@ -49,6 +49,7 @@ ChessBoard::ChessBoard()
 
 		board[4][0] = new King(4, 0, PRIORITY_KING, true, *this, turnsCounter);
 		board[4][7] = new King(4, 7, PRIORITY_KING, false, *this, turnsCounter);
+
 	}
 
 	whiteKing = board[4][0];
@@ -60,19 +61,6 @@ ChessBoard::ChessBoard()
 		figures.push_back(board[i][1]);
 		figures.push_back(board[i][6]);
 		figures.push_back(board[i][7]);
-	}
-}
-
-ChessBoard::ChessBoard(const ChessBoard& _other)
-{
-	board = new Figures * *[8];
-	playerColor = _other.playerColor;
-	for (int i = 0; i < 8; ++i)
-	{
-		for (int j = 0; i < 8; ++j)
-		{
-
-		}
 	}
 }
 

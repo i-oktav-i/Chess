@@ -16,18 +16,17 @@ public:
 
 	ChessBoard();
 
-	ChessBoard(const ChessBoard&);
-
 	~ChessBoard();
 
 	void show() const;
 	
 	const vector<Figures*>& getFigures() const;
-
-	Figures* findeFigure(pair<int, int>);
 	
 	Figures ** operator[] (int);
 
+	Figures* getWhiteKing() const { return whiteKing; }
+	
+	Figures* getBlackKing() const { return blackKing; }
 
 private:
 
