@@ -28,6 +28,8 @@ public:
 	
 	Figures ** operator[] (int);
 
+	Figures* getWhiteKing() const { return whiteKing; }
+	Figures* getBlackKing() const { return blackKing; }
 
 private:
 

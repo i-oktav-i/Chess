@@ -38,7 +38,9 @@ public:
 	virtual bool move(int, int);
 
 	virtual bool checkMove(int, int) const = 0;
-	
+
+	bool willBeOnCheck(int _x, int _y);
+
 	virtual vector<pair<int, int> >& getPosibleMoves() const;
 
 	vector<pair<int, int> >& getEatPieceMoves() const;
@@ -47,7 +49,10 @@ public:
 
 	bool isInDanger(int, int) const;
 
+	bool havePossibleMoves();
+
 	int getTurnNumber() const { return turnsCounter.getCount(); }
+
 
 protected:
 
@@ -146,9 +151,6 @@ public:
 	bool checkMove(int, int) const override;
 
 	vector<pair<int, int> >& getPosibleMoves() const override;
-
-	bool isCheck(int, int) const;
-	bool isCheckmate() const;
 
 	bool longRoque() const;
 	bool shortRoque() const;
