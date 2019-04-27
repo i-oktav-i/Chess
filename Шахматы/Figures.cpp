@@ -57,7 +57,7 @@ bool Figures::willBeOnCheck(int _x, int _y)
 	return willBeOnCheck;
 }
 
-vector<pair<int, int> >& Figures::getPosibleMoves() const
+vector<pair<int, int> > Figures::getPosibleMoves() const
 {
 	vector<pair<int, int> > moves;
 	for (int x = 0; x < 8; ++x)
@@ -176,25 +176,25 @@ bool Pawn::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Pawn::getPosibleMoves() const
-{
-	vector<pair<int, int>> moves;
-	for (int i = 0; i < 3; ++i)
-	{
-		if (color && checkMove(xPos - 1 + i, yPos + 1))
-			moves.push_back(pair<int, int>(xPos - 1 + i, yPos + 1));
-		else if ((!color) && checkMove(xPos - 1 + i, yPos - 1))
-			moves.push_back(pair<int, int>(xPos - 1 + i, yPos + 1));
-	}
-	if (!isMoved)
-	{
-		if (color && checkMove(xPos, yPos + 2))
-			moves.push_back(pair<int, int>(xPos, yPos + 2));
-		else if ((!color) && checkMove(xPos, yPos - 2))
-			moves.push_back(pair<int, int>(xPos, yPos + 2));
-	}
-	return moves;
-}
+//vector<pair<int, int>> Pawn::getPosibleMoves() const
+//{
+//	vector<pair<int, int>> moves;
+//	for (int i = 0; i < 3; ++i)
+//	{
+//		if (color && checkMove(xPos - 1 + i, yPos + 1))
+//			moves.push_back(pair<int, int>(xPos - 1 + i, yPos + 1));
+//		else if ((!color) && checkMove(xPos - 1 + i, yPos - 1))
+//			moves.push_back(pair<int, int>(xPos - 1 + i, yPos + 1));
+//	}
+//	if (!isMoved)
+//	{
+//		if (color && checkMove(xPos, yPos + 2))
+//			moves.push_back(pair<int, int>(xPos, yPos + 2));
+//		else if ((!color) && checkMove(xPos, yPos - 2))
+//			moves.push_back(pair<int, int>(xPos, yPos + 2));
+//	}
+//	return moves;
+//}
 
 void Pawn::reborn()
 {
@@ -250,7 +250,7 @@ bool Knight::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>> & Knight::getPosibleMoves() const
+vector<pair<int, int>>  Knight::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 
@@ -315,7 +315,7 @@ bool Bishop::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Bishop::getPosibleMoves() const
+vector<pair<int, int>> Bishop::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 8; ++i)
@@ -378,7 +378,7 @@ bool Castle::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Castle::getPosibleMoves() const
+vector<pair<int, int>> Castle::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 8; ++i)
@@ -439,7 +439,7 @@ bool Queen::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>>& Queen::getPosibleMoves() const
+vector<pair<int, int>> Queen::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 	for (int i = 0; i < 8; ++i)
@@ -514,7 +514,7 @@ bool King::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>> & King::getPosibleMoves() const
+vector<pair<int, int>> King::getPosibleMoves() const
 {
 	vector<pair<int, int>> moves;
 

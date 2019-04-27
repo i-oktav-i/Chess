@@ -1,3 +1,5 @@
+#include "Chess.h"
+#include <QtWidgets/QApplication>
 #include "Figures.h"
 #include "ChessBoard.h"
 #include <iostream>
@@ -63,12 +65,10 @@ void PvPGame()
 	}
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-
-	PvPGame();
-
-	system("pause");
-
-	return 0;
+	QApplication a(argc, argv);
+	Chess w;
+	w.show();
+	return a.exec();
 }
