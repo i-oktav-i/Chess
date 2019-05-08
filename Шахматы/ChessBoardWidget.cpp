@@ -81,8 +81,11 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent* _e)
 	else
 	{
 		if (selectedPiece->move(x, 7 - y))
+		{
+			/*if (whatPlayerTurn && selectedPiece->getName() == "W_P" || !whatPlayerTurn && selectedPiece->getName() == "B_P")
+				selectedPiece->reborn(1);*/
 			whatPlayerTurn = !whatPlayerTurn;
-
+		}
 		selectedPiece = nullptr;
 	}
 	update();

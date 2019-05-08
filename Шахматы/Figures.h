@@ -41,7 +41,7 @@ public:
 
 	bool willBeOnCheck(int _x, int _y);
 
-	virtual vector<pair<int, int> >& getPosibleMoves() const;
+	virtual vector<pair<int, int> > getPosibleMoves() const;
 
 	vector<pair<int, int> >& getEatPieceMoves() const;
 
@@ -53,6 +53,7 @@ public:
 
 	int getTurnNumber() const { return turnsCounter.getCount(); }
 
+	virtual void reborn(int) {};
 
 protected:
 
@@ -74,6 +75,7 @@ protected:
 	int movesCounter = 0;
 	TurnsCounter& turnsCounter;
 
+
 };
 
 class Pawn : public Figures
@@ -85,11 +87,9 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() const override;
+	//vector<pair<int, int> > getPosibleMoves() const override;
 
-private:
-
-	void reborn();
+	void reborn(int) override;
 
 };
 
@@ -101,7 +101,7 @@ public:
 	Knight(int, int, int, bool, ChessBoard&, TurnsCounter&);
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() const override;
+	vector<pair<int, int> > getPosibleMoves() const override;
 
 };
 
@@ -113,7 +113,7 @@ public:
 	Bishop(int, int, int, bool, ChessBoard&, TurnsCounter&);
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() const override;
+	vector<pair<int, int> > getPosibleMoves() const override;
 
 };
 
@@ -125,7 +125,7 @@ public:
 	Castle(int, int, int, bool, ChessBoard&, TurnsCounter&);
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() const override;
+	vector<pair<int, int> > getPosibleMoves() const override;
 
 };
 
@@ -137,7 +137,7 @@ public:
 	Queen(int, int, int, bool, ChessBoard&, TurnsCounter&);
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() const override;
+	vector<pair<int, int> > getPosibleMoves() const override;
 
 };
 
@@ -150,7 +150,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> >& getPosibleMoves() const override;
+	vector<pair<int, int> > getPosibleMoves() const override;
 
 	bool longRoque() const;
 	bool shortRoque() const;
