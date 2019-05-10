@@ -17,8 +17,6 @@ public:
 	ChessBoard();
 
 	~ChessBoard();
-
-	void show() const;
 	
 	const vector<Figures*>& getFigures() const;
 	
@@ -27,6 +25,8 @@ public:
 	Figures* getWhiteKing() const { return whiteKing; }
 	
 	Figures* getBlackKing() const { return blackKing; }
+
+	int getTurn() { return turnsCounter.getCount(); }
 
 private:
 

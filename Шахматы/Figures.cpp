@@ -13,10 +13,6 @@ Figures::Figures(int _x, int _y, int _priority, bool _color, ChessBoard& _board,
 {
 	xPos = _x;
 	yPos = _y;
-	/*
-		pos.first = _x;
-		pos.second = _y;
-	*/
 	color = _color;
 	priority = _priority;
 }
@@ -130,7 +126,6 @@ bool Pawn::move(int _x, int _y)
 	if (Figures::move(_x, _y))
 	{
 		if (yPos == 7 || yPos == 0)
-			//reborn(1);
 
 		if (color && yPos == 5 && board[xPos][4] != nullptr && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
 			board[xPos][4] = nullptr;
@@ -209,18 +204,6 @@ bool Pawn::checkMove(int _x, int _y) const
 
 void Pawn::reborn(int _i)
 {
-	//cout << "Chose figure type:" << endl;
-	//cout
-	//	<< "1. Queen" << endl
-	//	<< "2. Knight" << endl
-	//	<< "3. Bishop" << endl
-	//	<< "4. Castle" << endl;
-	//int i;
-	//while (!(cin >> i) && i >= 0 && i < 5)
-	//{
-	//	cin.clear();
-	//	while (cin.get() != '\n');
-	//}
 	switch (_i)
 	{
 	case 1:

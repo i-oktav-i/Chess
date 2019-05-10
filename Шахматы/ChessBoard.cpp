@@ -75,28 +75,6 @@ ChessBoard::~ChessBoard()
 	delete[] board;
 }
 
-void ChessBoard::show() const
-{
-	cout << "Turn number: " << turnsCounter.getCount() + 1 << endl;
-	for (int i = 7; i >= 0; i--)
-	{
-		cout << "   =================================================" << endl;
-		//			<< "|       |       |       |       |       |       |       |       |" << endl;
-		cout << i + 1 << "  ";
-		for (int j = 0; j < 8; j++)
-		{
-			if (board[j][i] == nullptr)
-				cout << "|     ";
-			else
-				cout << "| " << board[j][i]->getName() << " ";
-		}
-		cout << "|" << endl;
-		//			<< "|       |       |       |       |       |       |       |       |" << endl;
-	}
-	cout << "   =================================================" << endl
-		<< "      1     2     3     4     5     6     7     8" << endl;
-}
-
 const vector<Figures*>& ChessBoard::getFigures() const
 {
 	return figures;

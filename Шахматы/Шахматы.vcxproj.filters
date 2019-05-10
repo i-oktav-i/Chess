@@ -45,9 +45,6 @@
     <ClCompile Include="Figures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TurnsCounter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ChessBoardWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -11,6 +11,7 @@
 //#include <qmouseeventtransition.h>
 #include <qevent.h>
 #include <map>
+#include <qlabel.h>
 
 
 class ChessBoardWidget : public QWidget
@@ -20,6 +21,9 @@ class ChessBoardWidget : public QWidget
 public:
 	ChessBoardWidget(QWidget *parent = nullptr);
 	~ChessBoardWidget() {};
+
+	//int getTurn() { return board.getTurn(); }
+
 private:
 	int currentSize;
 	int currentTileSize;
@@ -28,10 +32,15 @@ private:
 	ChessBoard board;
 	QBrush brushWhite;
 	QBrush brushBlack;
+	QBrush brushGreen;
+	QBrush brushRed;
 	QBrush brushHighlight;
 	map<string, QImage> pieceImages;
 	Figures* selectedPiece = nullptr;
 	bool whatPlayerTurn;
+
+	QLabel turns;
+
 protected:
 	//void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;

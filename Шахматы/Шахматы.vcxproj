@@ -119,7 +119,6 @@
     <ClCompile Include="ChessBoardWidget.cpp" />
     <ClCompile Include="Figures.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TurnsCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Chess.h" />

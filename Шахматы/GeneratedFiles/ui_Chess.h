@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Chess.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.0
+** Created by: Qt User Interface Compiler version 5.12.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -11,11 +11,12 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include <chessboardwidget.h>
 
@@ -25,8 +26,9 @@ class Ui_ChessClass
 {
 public:
     QWidget *centralWidget;
-    QGridLayout *gridLayout;
+    QVBoxLayout *verticalLayout;
     ChessBoardWidget *widget;
+    QLabel *label;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -39,19 +41,22 @@ public:
         ChessClass->setMinimumSize(QSize(0, 0));
         centralWidget = new QWidget(ChessClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        gridLayout = new QGridLayout(centralWidget);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        verticalLayout = new QVBoxLayout(centralWidget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         widget = new ChessBoardWidget(centralWidget);
         widget->setObjectName(QString::fromUtf8("widget"));
+        label = new QLabel(widget);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setGeometry(QRect(170, 150, 47, 13));
 
-        gridLayout->addWidget(widget, 0, 0, 1, 1);
+        verticalLayout->addWidget(widget);
 
         ChessClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ChessClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 26));
+        menuBar->setGeometry(QRect(0, 0, 800, 21));
         ChessClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ChessClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -68,6 +73,7 @@ public:
     void retranslateUi(QMainWindow *ChessClass)
     {
         ChessClass->setWindowTitle(QApplication::translate("ChessClass", "Chess", nullptr));
+        label->setText(QApplication::translate("ChessClass", "TextLabel", nullptr));
     } // retranslateUi
 
 };
