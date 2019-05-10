@@ -11,9 +11,11 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
@@ -27,8 +29,10 @@ class Ui_ChessClass
 public:
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
-    ChessBoardWidget *widget;
-    QLabel *label;
+    ChessBoardWidget *chessBoard;
+    QGridLayout *gridLayout;
+    QLabel *turns;
+    QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -45,13 +49,24 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        widget = new ChessBoardWidget(centralWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        label = new QLabel(widget);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(170, 150, 47, 13));
+        chessBoard = new ChessBoardWidget(centralWidget);
+        chessBoard->setObjectName(QString::fromUtf8("chessBoard"));
+        gridLayout = new QGridLayout(chessBoard);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        turns = new QLabel(chessBoard);
+        turns->setObjectName(QString::fromUtf8("turns"));
+        turns->setMaximumSize(QSize(16777215, 30));
 
-        verticalLayout->addWidget(widget);
+        gridLayout->addWidget(turns, 0, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer, 1, 0, 1, 1);
+
+
+        verticalLayout->addWidget(chessBoard);
 
         ChessClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ChessClass);
@@ -73,7 +88,7 @@ public:
     void retranslateUi(QMainWindow *ChessClass)
     {
         ChessClass->setWindowTitle(QApplication::translate("ChessClass", "Chess", nullptr));
-        label->setText(QApplication::translate("ChessClass", "TextLabel", nullptr));
+        turns->setText(QApplication::translate("ChessClass", "TextLabel", nullptr));
     } // retranslateUi
 
 };

@@ -22,7 +22,7 @@ public:
 	ChessBoardWidget(QWidget *parent = nullptr);
 	~ChessBoardWidget() {};
 
-	//int getTurn() { return board.getTurn(); }
+	int getTurn() { return board.getTurn(); }
 
 private:
 	int currentSize;
@@ -39,9 +39,9 @@ private:
 	Figures* selectedPiece = nullptr;
 	bool whatPlayerTurn;
 
-	QLabel turns;
+	bool gameType;
 
-protected:
+	QLabel turns;
 	//void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 	void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;

@@ -18,4 +18,5 @@ public:
 
 private:
 	Ui::ChessClass ui;
+	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 };

@@ -1,5 +1,6 @@
 #include "ChessBoardWidget.h"
 #include <qpainter.h>
+#include <qmessagebox.h>
 
 ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	: QWidget(parent)
@@ -33,6 +34,20 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	pieceImages["B_H"] = sheet.copy(pieceWidth * 3, pieceHeight, pieceWidth, pieceHeight);
 	pieceImages["B_C"] = sheet.copy(pieceWidth * 4, pieceHeight, pieceWidth, pieceHeight);
 	pieceImages["B_P"] = sheet.copy(pieceWidth * 5, pieceHeight, pieceWidth, pieceHeight);
+
+
+	QMessageBox msgBox;
+	QPushButton* pvpButton = msgBox.addButton(tr("PvP"), QMessageBox::ActionRole);
+	QPushButton* pveButton = msgBox.addButton(tr("PvE"), QMessageBox::ActionRole);
+
+	msgBox.exec();
+
+	//if (msgBox.clickedButton() == pvpButton) {
+	//	// connect
+	//}
+	//else if (msgBox.clickedButton() == pveButton) {
+	//	// abort
+	//}
 
 	whatPlayerTurn = false;
 
