@@ -57,6 +57,8 @@ public:
 
 	virtual void reborn(int) {};
 
+	int getPosPriority(int _x, int _y) { return positionPriorityMatrix[_x][_y]; }
+
 protected:
 
 	Figures(int, int, int, bool, ChessBoard&, TurnsCounter&);
@@ -76,6 +78,7 @@ protected:
 	int turnOfLastMove = 0;
 	int movesCounter = 0;
 	TurnsCounter& turnsCounter;
+	float positionPriorityMatrix[8][8];
 
 
 };

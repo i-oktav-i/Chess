@@ -141,6 +141,21 @@ Pawn::Pawn(int _x, int _y, int _priority, bool _color, ChessBoard & _board, Turn
 		name = "W_P";
 	else
 		name = "B_P";
+
+	float t[8][8] = {
+	   {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0} ,
+	   {5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0},
+	   {1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0},
+	   {0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5},
+	   {0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0},
+	   {0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5},
+	   {0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5},
+	   {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+	};
+
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			positionPriorityMatrix[i][j] = t[i][j];
 }
 
 bool Pawn::move(int _x, int _y)
@@ -148,7 +163,7 @@ bool Pawn::move(int _x, int _y)
 	if (Figures::move(_x, _y))
 	{
 		if (yPos == 7 || yPos == 0)
-			yPos;
+			board[xPos][yPos] = new Queen(xPos, yPos, PRIORITY_QUEEN, color, board, turnsCounter);
 
 		if (color && yPos == 5 && board[xPos][4] != nullptr && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
 			board[xPos][4] = nullptr;
@@ -246,12 +261,26 @@ void Pawn::reborn(int _i)
 	}
 }
 
-Knight::Knight(int _x, int _y, int _priority, bool _color, ChessBoard & _board, TurnsCounter & _turnsCounter) : Figures(_x, _y, _priority, _color, _board, _turnsCounter)
+Knight::Knight(int _x, int _y, int _priority, bool _color, ChessBoard& _board, TurnsCounter& _turnsCounter) : Figures(_x, _y, _priority, _color, _board, _turnsCounter)
 {
 	if (_color)
 		name = "W_H";
 	else
 		name = "B_H";
+
+	float t[8][8] = {
+		{-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0},
+		{-4.0, -2.0, 0.0, 0.0, 0.0, 0.0, -2.0, -4.0},
+		{-3.0, 0.0, 1.0, 1.5, 1.5, 1.0, 0.0, -3.0},
+		{-3.0, 0.5, 1.5, 2.0, 2.0, 1.5, 0.5, -3.0},
+		{-3.0, 0.0, 1.5, 2.0, 2.0, 1.5, 0.0, -3.0},
+		{-3.0, 0.5, 1.0, 1.5, 1.5, 1.0, 0.5, -3.0},
+		{-4.0, -2.0, 0.0, 0.5, 0.5, 0.0, -2.0, -4.0},
+		{-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.} 
+	};
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			positionPriorityMatrix[i][j] = t[i][j];
 }
 
 
@@ -304,6 +333,20 @@ Bishop::Bishop(int _x, int _y, int _priority, bool _color, ChessBoard & _board, 
 		name = "W_B";
 	else
 		name = "B_B";
+
+	float t[8][8] = {
+	{ -2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0},
+	{ -1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0},
+	{ -1.0,  0.0,  0.5,  1.0,  1.0,  0.5,  0.0, -1.0},
+	{ -1.0,  0.5,  0.5,  1.0,  1.0,  0.5,  0.5, -1.0},
+	{ -1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  0.0, -1.0},
+	{ -1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0, -1.0},
+	{ -1.0,  0.5,  0.0,  0.0,  0.0,  0.0,  0.5, -1.0},
+	{ -2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0}
+	};
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			positionPriorityMatrix[i][j] = t[i][j];
 }
 
 bool Bishop::checkMove(int _x, int _y) const 
@@ -359,6 +402,20 @@ Castle::Castle(int _x, int _y, int _priority, bool _color, ChessBoard & _board, 
 		name = "W_C";
 	else
 		name = "B_C";
+
+	float t[8][8] = {
+	{  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0},
+    {  0.5,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  0.5},
+    { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+    { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+    { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+    { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+    { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+    {  0.0,   0.0, 0.0,  0.5,  0.5,  0.0,  0.0,  0.0}
+	};
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			positionPriorityMatrix[i][j] = t[i][j];
 }
 
 bool Castle::checkMove(int _x, int _y) const 
@@ -418,6 +475,20 @@ Queen::Queen(int _x, int _y, int _priority, bool _color, ChessBoard & _board, Tu
 		name = "W_Q";
 	else
 		name = "B_Q";
+
+	float t[8][8] = {
+	{ -2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0},
+    { -1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0},
+    { -1.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0},
+    { -0.5,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5},
+    {  0.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5},
+    { -1.0,  0.5,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0},
+    { -1.0,  0.0,  0.5,  0.0,  0.0,  0.0,  0.0, -1.0},
+    { -2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0}
+	};
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			positionPriorityMatrix[i][j] = t[i][j];
 }
 
 bool Queen::checkMove(int _x, int _y) const 
@@ -494,6 +565,20 @@ King::King(int _x, int _y, int _priority, bool _color, ChessBoard & _board, Turn
 		name = "W_K";
 	else
 		name = "B_K";
+
+	float t[8][8] = {
+	{ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+	{ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+	{ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+	{ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+	{ -2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0},
+	{ -1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0},
+	{  2.0,  2.0,  0.0,  0.0,  0.0,  0.0,  2.0,  2.0},
+	{  2.0,  3.0,  1.0,  0.0,  0.0,  1.0,  3.0,  2.0}
+	};
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			positionPriorityMatrix[i][j] = t[i][j];
 }
 
 bool King::move(int _x, int _y)
@@ -568,10 +653,10 @@ bool King::longRoque() const
 		return false;
 
 	if (color && board[0][0] != nullptr && board[0][0]->getName() == "W_C" && !board[0][0]->getTurnOfLastMove())
-		if (board[1][0] == nullptr && board[2][0] == nullptr && board[3][0] == nullptr && !board[1][0]->isInDanger() && !board[3][0]->isInDanger() && !isInDanger(2, 0))
+		if (board[1][0] == nullptr && board[2][0] == nullptr && board[3][0] == nullptr && !isInDanger(1, 0) && !isInDanger(3, 0) && !isInDanger(2, 0))
 			return true;
 	if (!color && board[0][7] != nullptr && board[0][7]->getName() == "B_C" && !board[0][7]->getTurnOfLastMove())
-		if (board[1][7] == nullptr && board[2][7] == nullptr && board[3][7] == nullptr && !board[1][7]->isInDanger() && !board[3][7]->isInDanger() && !isInDanger(2, 7))
+		if (board[1][7] == nullptr && board[2][7] == nullptr && board[3][7] == nullptr && !isInDanger(3, 0) && !isInDanger(3, 7) && !isInDanger(2, 7))
 			return true;
 
 	return false;
@@ -583,11 +668,11 @@ bool King::shortRoque() const
 		return false;
 
 	if (color && board[7][0] != nullptr && board[7][0]->getName() == "W_C" && !board[7][0]->getTurnOfLastMove())
-		if (board[5][0] == nullptr && !board[5][0]->isInDanger() && board[6][0] == nullptr && !isInDanger(6, 0))
+		if (board[5][0] == nullptr && !isInDanger(5, 0) && board[6][0] == nullptr && !isInDanger(6, 0))
 			return true;
 
 	if (!color && board[7][7] != nullptr && board[7][7]->getName() == "B_C" && !board[7][7]->getTurnOfLastMove())
-		if (board[5][7] == nullptr && !board[5][7]->isInDanger() && board[6][7] == nullptr && !isInDanger(6, 7))
+		if (board[5][7] == nullptr && !isInDanger(5, 7) && board[6][7] == nullptr && !isInDanger(6, 7))
 			return true;
 
 	return false;

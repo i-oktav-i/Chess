@@ -104,50 +104,77 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 	for (auto i : eatPeaceMoves)
 	{
 		if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+		{
 			if (board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority() > maxValue)
 			{
 				maxValue = board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority();
 				bestMove = i;
 			}
+		}
+		else
+		{
+			maxValue = board[i.second.first][i.second.second]->getPriority();
+			bestMove = i;
+		}
 	}
 
-	if (maxValue == -100)
+
+	if (maxValue != -100)
+		return bestMove;
+
+	maxValue = 100;
+
+	for (auto i : allMoves)
 	{
-		maxValue = 100;
-		for (auto i : allMoves)
+		if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
 		{
-			if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+			if (board[i.first.first][i.first.second]->getPriority() < maxValue)
 			{
-				if (board[i.first.first][i.first.second]->getPriority() < maxValue)
-				{
-					maxValue = board[i.first.first][i.first.second]->getPriority();
-					bestMove = i;
-				}
-			}
-			else
-			{
-				maxValue = 0;
+				maxValue = board[i.first.first][i.first.second]->getPriority();
 				bestMove = i;
 			}
 		}
+		else
+		{
+			maxValue = 0;
+			bestMove = i;
+		}
 	}
-	vector <pair<pair<int, int>, pair<int, int> > > random;
+
+	vector <pair<pair<int, int>, pair<int, int> > > useless;
 	for (auto i : allMoves)
 	{
 		if (maxValue == 0)
 		{
 			if (!board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
-				random.push_back(i);
+				useless.push_back(i);
 		}
-		else
+		else if (board[i.first.first][i.first.second]->getPriority() == maxValue)
 		{
-			if (board[i.first.first][i.first.second]->getPriority() == maxValue)
-			{
-				random.push_back(i);
-			}
+			useless.push_back(i);
 		}
 	}
 	
+	maxValue = -6;
+
+	vector <pair<pair<int, int>, pair<int, int> > > random;
+
+	for (auto i : useless)
+	{
+		if (board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second) > maxValue)
+		{
+			maxValue = board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second);
+		}
+	}
+
+	for (auto i : useless)
+	{
+		if (board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second) == maxValue)
+		{
+			random.push_back(i);
+		}
+	}
+
 	srand(time(0));
 	return random[rand() % random.size()];
 }
@@ -200,6 +227,17 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 		painter.drawImage(QRect(selectedPiece->getPos().first * currentTileSize + horisontalOffsets, (7 - selectedPiece->getPos().second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize), pieceImages[selectedPiece->getName()]);
 		painter.setOpacity(1);
 	}
+
+	if (whatPlayerTurn && board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && board.getBlackKing()->havePossibleMoves())
+	{
+		auto i = getBotTurn();
+		board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
+		whatPlayerTurn = !whatPlayerTurn;
+		update();
+	}
+	else
+		close();
+	_sleep(300);
 }
 
 
@@ -207,12 +245,16 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent* _e)
 {
 	if (_e->button() == Qt::LeftButton && !gameType)
 	{
-		auto i = getBotTurn();
-		board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
-		whatPlayerTurn = !whatPlayerTurn;
-		update();
+		if (whatPlayerTurn && board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && board.getBlackKing()->havePossibleMoves())
+		{
+			auto i = getBotTurn();
+			board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
+			whatPlayerTurn = !whatPlayerTurn;
+			update();
+		}
+		else
+			close();
 	}
-
 
 	if (_e->button() == Qt::LeftButton && gameType)
 	{
