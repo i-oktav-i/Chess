@@ -42,7 +42,6 @@ private:
 
 	pair<pair<int, int>, pair<int, int> > getBotTurn();
 	bool gameType;
-
 	QLabel turns;
 	//void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;

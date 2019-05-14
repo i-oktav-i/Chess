@@ -2,6 +2,8 @@
 #include <qpainter.h>
 #include <qmessagebox.h>
 #include <utility>
+#include <random>
+#include <ctime>
 
 ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	: QWidget(parent)
@@ -98,6 +100,7 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 	}
 	pair<pair<int, int>, pair<int, int> > bestMove;
 	int maxValue = -100;
+
 	for (auto i : eatPeaceMoves)
 	{
 		if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
@@ -128,8 +131,25 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 			}
 		}
 	}
-
-	return bestMove;
+	vector <pair<pair<int, int>, pair<int, int> > > random;
+	for (auto i : allMoves)
+	{
+		if (maxValue == 0)
+		{
+			if (!board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+				random.push_back(i);
+		}
+		else
+		{
+			if (board[i.first.first][i.first.second]->getPriority() == maxValue)
+			{
+				random.push_back(i);
+			}
+		}
+	}
+	
+	srand(time(0));
+	return random[rand() % random.size()];
 }
 
 void ChessBoardWidget::paintEvent(QPaintEvent*)
@@ -182,9 +202,19 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 	}
 }
 
+
 void ChessBoardWidget::mousePressEvent(QMouseEvent* _e)
 {
-	if (_e->button() == Qt::LeftButton)
+	if (_e->button() == Qt::LeftButton && !gameType)
+	{
+		auto i = getBotTurn();
+		board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
+		whatPlayerTurn = !whatPlayerTurn;
+		update();
+	}
+
+
+	if (_e->button() == Qt::LeftButton && gameType)
 	{
 		int x = (_e->x() - horisontalOffsets) / currentTileSize;
 		int y = (_e->y() - verticalOffsets) / currentTileSize;

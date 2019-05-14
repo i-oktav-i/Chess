@@ -531,47 +531,47 @@ bool King::checkMove(int _x, int _y) const
 	return false;
 }
 
-vector<pair<int, int>> King::getPosibleMoves() const
-{
-	vector<pair<int, int>> moves;
-
-	if (checkMove(xPos + 1, yPos + 1))
-		moves.push_back(pair<int, int>(xPos + 1, yPos + 1));
-
-	if (checkMove(xPos + 1, yPos))
-		moves.push_back(pair<int, int>(xPos + 1, yPos));
-
-	if (checkMove(xPos + 1, yPos - 1))
-		moves.push_back(pair<int, int>(xPos + 1, yPos - 1));
-
-	if (checkMove(xPos, yPos - 1))
-		moves.push_back(pair<int, int>(xPos, yPos - 1));
-
-	if (checkMove(xPos - 1, yPos - 1))
-		moves.push_back(pair<int, int>(xPos - 1, yPos - 1));
-
-	if (checkMove(xPos - 1, yPos))
-		moves.push_back(pair<int, int>(xPos - 1, yPos));
-
-	if (checkMove(xPos - 1, yPos + 1))
-		moves.push_back(pair<int, int>(xPos - 1, yPos + 1));
-
-	if (checkMove(xPos, yPos + 1))
-		moves.push_back(pair<int, int>(xPos, yPos + 1));
-
-	return moves;
-}
+//vector<pair<int, int>> King::getPosibleMoves() const
+//{
+//	vector<pair<int, int>> moves;
+//
+//	if (checkMove(xPos + 1, yPos + 1))
+//		moves.push_back(pair<int, int>(xPos + 1, yPos + 1));
+//
+//	if (checkMove(xPos + 1, yPos))
+//		moves.push_back(pair<int, int>(xPos + 1, yPos));
+//
+//	if (checkMove(xPos + 1, yPos - 1))
+//		moves.push_back(pair<int, int>(xPos + 1, yPos - 1));
+//
+//	if (checkMove(xPos, yPos - 1))
+//		moves.push_back(pair<int, int>(xPos, yPos - 1));
+//
+//	if (checkMove(xPos - 1, yPos - 1))
+//		moves.push_back(pair<int, int>(xPos - 1, yPos - 1));
+//
+//	if (checkMove(xPos - 1, yPos))
+//		moves.push_back(pair<int, int>(xPos - 1, yPos));
+//
+//	if (checkMove(xPos - 1, yPos + 1))
+//		moves.push_back(pair<int, int>(xPos - 1, yPos + 1));
+//
+//	if (checkMove(xPos, yPos + 1))
+//		moves.push_back(pair<int, int>(xPos, yPos + 1));
+//
+//	return moves;
+//}
 
 bool King::longRoque() const
 {
-	if (turnOfLastMove)
+	if (movesCounter)
 		return false;
 
 	if (color && board[0][0] != nullptr && board[0][0]->getName() == "W_C" && !board[0][0]->getTurnOfLastMove())
-		if (board[1][0] == nullptr && board[2][0] == nullptr && board[3][0] == nullptr && !isInDanger(2, 0))
+		if (board[1][0] == nullptr && board[2][0] == nullptr && board[3][0] == nullptr && !board[1][0]->isInDanger() && !board[3][0]->isInDanger() && !isInDanger(2, 0))
 			return true;
 	if (!color && board[0][7] != nullptr && board[0][7]->getName() == "B_C" && !board[0][7]->getTurnOfLastMove())
-		if (board[1][7] == nullptr && board[2][7] == nullptr && board[3][7] == nullptr && !isInDanger(2, 7))
+		if (board[1][7] == nullptr && board[2][7] == nullptr && board[3][7] == nullptr && !board[1][7]->isInDanger() && !board[3][7]->isInDanger() && !isInDanger(2, 7))
 			return true;
 
 	return false;
@@ -579,15 +579,15 @@ bool King::longRoque() const
 
 bool King::shortRoque() const
 {
-	if (turnOfLastMove)
+	if (movesCounter)
 		return false;
 
 	if (color && board[7][0] != nullptr && board[7][0]->getName() == "W_C" && !board[7][0]->getTurnOfLastMove())
-		if (board[5][0] == nullptr && board[6][0] == nullptr && !isInDanger(6, 0))
+		if (board[5][0] == nullptr && !board[5][0]->isInDanger() && board[6][0] == nullptr && !isInDanger(6, 0))
 			return true;
 
 	if (!color && board[7][7] != nullptr && board[7][7]->getName() == "B_C" && !board[7][7]->getTurnOfLastMove())
-		if (board[5][7] == nullptr && board[6][7] == nullptr && !isInDanger(6, 7))
+		if (board[5][7] == nullptr && !board[5][7]->isInDanger() && board[6][7] == nullptr && !isInDanger(6, 7))
 			return true;
 
 	return false;

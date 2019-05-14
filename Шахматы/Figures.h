@@ -152,7 +152,7 @@ public:
 	bool move(int, int) override;
 	bool checkMove(int, int) const override;
 
-	vector<pair<int, int> > getPosibleMoves() const override;
+	//vector<pair<int, int> > getPosibleMoves() const override;
 
 	bool longRoque() const;
 	bool shortRoque() const;

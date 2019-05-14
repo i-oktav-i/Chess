@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Player" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAIAAAAQAAAAA=</HashCode>
+      <FileName>AIplayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AIPlayer" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAgAAAAAAIAAAAgAEAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>AIplayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Move">
+    <Position X="11.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAIABAAAAAAAAAAABAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>AIplayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessBoard">
+    <Position X="13.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAgAAAAAAgAAAAoIAAAAAAMAAAAAIAAAEAIAAAA=</HashCode>
+      <FileName>ChessBoard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Figures">
+    <Position X="6.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>sAAOAMqAAAUAAACEAAAAAAAAIBAeAICCIAAkgQAAABA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pawn">
+    <Position X="4.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAgACEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Knight">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAEAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bishop">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Castle">
+    <Position X="4.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAQCAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Queen">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAEAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="King">
+    <Position X="9.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAgAACEAAAAAAAEAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TurnsCounter">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAARAEAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>TurnsCounter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chess">
+    <Position X="11.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Chess.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChessBoardWidget">
+    <Position X="15" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAABAAEAAAAAgNQAAADAFAAEQAAACIAIAAQJAAAA=</HashCode>
+      <FileName>ChessBoardWidget.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

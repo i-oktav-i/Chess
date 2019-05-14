@@ -74,7 +74,7 @@ const vector<Figures*> ChessBoard::getFigures(bool _player) const
 	{
 		for (int y = 0; y < 8; ++y)
 		{
-			if (board[x][y] != nullptr && board[x][y]->getColor() != _player)
+			if (board[x][y] != nullptr && board[x][y]->getColor() == _player)
 				figures.push_back(board[x][y]);
 		}
 	}
