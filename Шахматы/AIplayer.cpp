@@ -26,24 +26,24 @@ void AIPlayer::takeTurn()
 vector<Figures*>& AIPlayer::getMovebleFigures()
 {
 	vector<Figures*> figures;
-	for (auto i : board.getFigures())
+	/*for (auto i : board.getFigures())
 	{
 		if (i->getPosibleMoves().size() > 0)
 			figures.push_back(i);
 	}
-
+*/
 	return figures;
 }
 
 vector<Figures*>& AIPlayer::getFiguresInDanger()
 {
 	vector<Figures*> figuresInDanger;
-
+/*
 	for (auto i : board.getFigures())
 	{
 		if (i->getColor() == playerColor && i->isInDanger())
 			figuresInDanger.push_back(i);
-	}
+	}*/
 
 	return figuresInDanger;
 }
@@ -51,12 +51,12 @@ vector<Figures*>& AIPlayer::getFiguresInDanger()
 vector<Figures*>& AIPlayer::getKillebleFigures()
 {
 	vector<Figures*> killebleFigures;
-
+/*
 	for (auto i : board.getFigures())
 	{
 		if (i->getColor() != playerColor && i->isInDanger())
 			killebleFigures.push_back(i);
-	}
+	}*/
 
 	return killebleFigures;
 }
@@ -64,12 +64,12 @@ vector<Figures*>& AIPlayer::getKillebleFigures()
 vector<Figures*>& AIPlayer::getKillFiguresFigures()
 {
 	vector<Figures*> killFiguresFigures;
-
+/*
 	for (auto i : board.getFigures())
 	{
 		if (i->getColor() == playerColor && i->getEatPieceMoves().size() != 0)
 			killFiguresFigures.push_back(i);
-	}
+	}*/
 
 	return killFiguresFigures;
 }

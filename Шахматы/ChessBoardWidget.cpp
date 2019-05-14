@@ -1,6 +1,7 @@
 #include "ChessBoardWidget.h"
 #include <qpainter.h>
 #include <qmessagebox.h>
+#include <utility>
 
 ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	: QWidget(parent)
@@ -10,8 +11,8 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 
 	brushBlack = QBrush(QColor(0, 0, 0, 200), Qt::SolidPattern);
 	brushWhite = QBrush(QColor(0, 0, 0, 100), Qt::SolidPattern);
-	brushHighlight = QBrush(QColor(255, 0, 255, 150), Qt::SolidPattern);
-	brushGreen = QBrush(QColor(0, 255, 0, 100), Qt::SolidPattern);
+	brushHighlight = QBrush(QColor(0, 255, 0, 150), Qt::SolidPattern);
+	//brushGreen = QBrush(QColor(0, 255, 0, 100), Qt::SolidPattern);
 	brushRed = QBrush(QColor(255, 0, 0, 150), Qt::SolidPattern);
 
 	QImage sheet("./Resources/chess_pieces.png");
@@ -36,23 +37,100 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	pieceImages["B_P"] = sheet.copy(pieceWidth * 5, pieceHeight, pieceWidth, pieceHeight);
 
 
-	QMessageBox msgBox;
-	QPushButton* pvpButton = msgBox.addButton(tr("PvP"), QMessageBox::ActionRole);
-	QPushButton* pveButton = msgBox.addButton(tr("PvE"), QMessageBox::ActionRole);
+	QMessageBox msgBox(QMessageBox::Question,
+		"Game type",
+		"Chose game type",
+		QMessageBox::Yes | QMessageBox::No,
+		this);
+	msgBox.setButtonText(QMessageBox::Yes, "PvP");
+	msgBox.setButtonText(QMessageBox::No, "PvE");
 
-	msgBox.exec();
-
-	//if (msgBox.clickedButton() == pvpButton) {
-	//	// connect
-	//}
-	//else if (msgBox.clickedButton() == pveButton) {
-	//	// abort
-	//}
+	if (msgBox.exec() == QMessageBox::Yes)
+		gameType = true;
+	else
+		gameType = false;
 
 	whatPlayerTurn = false;
 
 }
 
+
+pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
+{
+	vector <pair<pair<int, int>, pair<int, int> > > allMoves;
+	vector <pair<pair<int, int>, pair<int, int> > > eatPeaceMoves;
+	vector <Figures*> peaceInDanger;
+
+	for (auto i : board.getFigures(whatPlayerTurn))
+	{
+		for (int x = 0; x < 8; ++x)
+			for (int y = 0; y < 8; ++y)
+				if (i->checkMove(x, y) && !i->willBeOnCheck(x, y))
+					allMoves.push_back(make_pair(make_pair(
+						i->getPos().first, i->getPos().second), make_pair(x, y)
+					));
+		if (i->isInDanger())
+			peaceInDanger.push_back(i);
+	}
+	for (auto i : allMoves)
+	{
+		if (board[i.first.first][i.first.second]->willBeCheckmate(i.second.first, i.second.second))
+			return i;
+
+		if (board[i.second.first][i.second.second] != nullptr)
+			eatPeaceMoves.push_back(i);
+		else if (board[i.first.first][i.first.second]->getName() == "W_P" ||
+			board[i.first.first][i.first.second]->getName() == "B_P")
+		{
+			Figures* peace = board[i.first.first][i.first.second];
+			if (peace->getColor() && peace->getPos().second == 5 &&
+				board[peace->getPos().first][4] != nullptr &&
+				board[peace->getPos().first][4]->getName() == "B_P" &&
+				board[peace->getPos().first][4]->getMovesCounter() == 1)
+				eatPeaceMoves.push_back(i);
+
+			if (!peace->getColor() && peace->getPos().second == 2 &&
+				board[peace->getPos().first][3] != nullptr &&
+				board[peace->getPos().first][3]->getName() == "W_P" &&
+				board[peace->getPos().first][3]->getMovesCounter() == 1)
+				eatPeaceMoves.push_back(i);
+		}
+	}
+	pair<pair<int, int>, pair<int, int> > bestMove;
+	int maxValue = -100;
+	for (auto i : eatPeaceMoves)
+	{
+		if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+			if (board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority() > maxValue)
+			{
+				maxValue = board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority();
+				bestMove = i;
+			}
+	}
+
+	if (maxValue == -100)
+	{
+		maxValue = 100;
+		for (auto i : allMoves)
+		{
+			if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+			{
+				if (board[i.first.first][i.first.second]->getPriority() < maxValue)
+				{
+					maxValue = board[i.first.first][i.first.second]->getPriority();
+					bestMove = i;
+				}
+			}
+			else
+			{
+				maxValue = 0;
+				bestMove = i;
+			}
+		}
+	}
+
+	return bestMove;
+}
 
 void ChessBoardWidget::paintEvent(QPaintEvent*)
 {
@@ -63,6 +141,8 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 	horisontalOffsets = (width() - currentSize) / 2;
 	verticalOffsets = (height() - 30 - currentSize) / 2 + 30;
 
+	if (whatPlayerTurn && !board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && !board.getBlackKing()->havePossibleMoves())
+		close();
 
 	for (int x = 0; x < 8; x++) {
 		for (int y = 0; y < 8; y++) {
@@ -71,23 +151,34 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 
 			painter.drawRect(x * currentTileSize + horisontalOffsets, y * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
 
-			if (board[x][y] == board.getBlackKing() && board.getBlackKing()->isInDanger() || board[x][y] == board.getWhiteKing() && board.getWhiteKing()->isInDanger())
+			if (board[x][y] == board.getBlackKing() && board.getBlackKing()->isInDanger())
 			{
 				painter.setBrush(brushRed);
 				painter.drawRect(board.getBlackKing()->getPos().first * currentTileSize + horisontalOffsets, (7 - board.getBlackKing()->getPos().second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
 			}
+			if (board[x][y] == board.getWhiteKing() && board.getWhiteKing()->isInDanger())
+			{
+				painter.setBrush(brushRed);
+				painter.drawRect(board.getWhiteKing()->getPos().first * currentTileSize + horisontalOffsets, (7 - board.getWhiteKing()->getPos().second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
+			}
 
-			if(board[x][7 - y] != nullptr && board[x][7 - y] != selectedPiece)
+			if (board[x][7 - y] != nullptr && board[x][7 - y] != selectedPiece)
+			{
 				painter.drawImage(QRect(x * currentTileSize + horisontalOffsets, y * currentTileSize + verticalOffsets, currentTileSize, currentTileSize), pieceImages[board[x][7 - y]->getName()]);
+			}
 		}
 	}
 	if (selectedPiece != nullptr)
 	{
 		painter.setBrush(brushHighlight);
+
 		for (auto i : selectedPiece->getPosibleMoves())
-			painter.drawRect(i.first * currentTileSize + horisontalOffsets, (7 - i.second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
-		painter.setBrush(brushGreen);
-		painter.drawRect(selectedPiece->getPos().first * currentTileSize + horisontalOffsets, (7 - selectedPiece->getPos().second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
+			if (!selectedPiece->willBeOnCheck(i.first, i.second))
+				painter.drawRect(i.first * currentTileSize + horisontalOffsets, (7 - i.second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
+		
+		painter.setOpacity(0.2);
+		painter.drawImage(QRect(selectedPiece->getPos().first * currentTileSize + horisontalOffsets, (7 - selectedPiece->getPos().second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize), pieceImages[selectedPiece->getName()]);
+		painter.setOpacity(1);
 	}
 }
 
@@ -110,6 +201,12 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent* _e)
 			if (selectedPiece->move(x, 7 - y))
 			{
 				whatPlayerTurn = !whatPlayerTurn;
+				if (!gameType)
+				{
+					auto i = getBotTurn();
+					board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
+					whatPlayerTurn = !whatPlayerTurn;
+				}
 			}
 			selectedPiece = nullptr;
 		}

@@ -41,6 +41,8 @@ public:
 
 	bool willBeOnCheck(int _x, int _y);
 
+	bool willBeCheckmate(int _x, int _y);
+
 	virtual vector<pair<int, int> > getPosibleMoves() const;
 
 	vector<pair<int, int> >& getEatPieceMoves() const;

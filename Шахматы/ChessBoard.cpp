@@ -54,14 +54,6 @@ ChessBoard::ChessBoard()
 
 	whiteKing = board[4][0];
 	blackKing = board[4][7];
-
-	for (int i = 0; i < 8; ++i)
-	{
-		figures.push_back(board[i][0]);
-		figures.push_back(board[i][1]);
-		figures.push_back(board[i][6]);
-		figures.push_back(board[i][7]);
-	}
 }
 
 ChessBoard::~ChessBoard()
@@ -75,8 +67,18 @@ ChessBoard::~ChessBoard()
 	delete[] board;
 }
 
-const vector<Figures*>& ChessBoard::getFigures() const
+const vector<Figures*> ChessBoard::getFigures(bool _player) const
 {
+	vector<Figures*> figures;
+	for (int x = 0; x < 8; ++x)
+	{
+		for (int y = 0; y < 8; ++y)
+		{
+			if (board[x][y] != nullptr && board[x][y]->getColor() != _player)
+				figures.push_back(board[x][y]);
+		}
+	}
+
 	return figures;
 }
 

@@ -18,7 +18,7 @@ public:
 
 	~ChessBoard();
 	
-	const vector<Figures*>& getFigures() const;
+	const vector<Figures*> getFigures(bool) const;
 	
 	Figures ** operator[] (int);
 
@@ -33,8 +33,6 @@ private:
 	Figures*** board;
 
 	bool playerColor;
-
-	vector<Figures*> figures;
 
 	TurnsCounter turnsCounter;
 

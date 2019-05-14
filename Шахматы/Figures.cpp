@@ -52,6 +52,28 @@ bool Figures::willBeOnCheck(int _x, int _y)
 
 	return willBeOnCheck;
 }
+bool Figures::willBeCheckmate(int _x, int _y)
+{
+	Figures* piece = board[_x][_y];
+	int oldX = xPos, oldY = yPos;
+	setPos(_x, _y);
+	turnOfLastMove = ++turnsCounter;
+	++movesCounter;
+
+	bool willBeCheckmate = false;
+
+	if (!color)
+		willBeCheckmate = board.getWhiteKing()->havePossibleMoves() && board.getWhiteKing()->isInDanger();
+	else
+		willBeCheckmate = board.getBlackKing()->havePossibleMoves() && board.getBlackKing()->isInDanger();
+
+	setPos(oldX, oldY);
+	turnOfLastMove = --turnsCounter;
+	--movesCounter;
+	board[_x][_y] = piece;
+
+	return willBeCheckmate;
+}
 
 vector<pair<int, int> > Figures::getPosibleMoves() const
 {
@@ -126,6 +148,7 @@ bool Pawn::move(int _x, int _y)
 	if (Figures::move(_x, _y))
 	{
 		if (yPos == 7 || yPos == 0)
+			yPos;
 
 		if (color && yPos == 5 && board[xPos][4] != nullptr && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
 			board[xPos][4] = nullptr;

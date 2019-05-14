@@ -12,6 +12,7 @@
 #include <qevent.h>
 #include <map>
 #include <qlabel.h>
+#include <utility>
 
 
 class ChessBoardWidget : public QWidget
@@ -39,6 +40,7 @@ private:
 	Figures* selectedPiece = nullptr;
 	bool whatPlayerTurn;
 
+	pair<pair<int, int>, pair<int, int> > getBotTurn();
 	bool gameType;
 
 	QLabel turns;
