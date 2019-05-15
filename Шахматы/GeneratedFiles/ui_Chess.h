@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Chess.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.3
+** Created by: Qt User Interface Compiler version 5.12.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,10 +12,8 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
@@ -31,8 +29,6 @@ public:
     QVBoxLayout *verticalLayout;
     ChessBoardWidget *chessBoard;
     QGridLayout *gridLayout;
-    QLabel *turns;
-    QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -55,23 +51,13 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        turns = new QLabel(chessBoard);
-        turns->setObjectName(QString::fromUtf8("turns"));
-        turns->setMaximumSize(QSize(16777215, 30));
-
-        gridLayout->addWidget(turns, 0, 0, 1, 1);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout->addItem(verticalSpacer, 1, 0, 1, 1);
-
 
         verticalLayout->addWidget(chessBoard);
 
         ChessClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ChessClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 21));
+        menuBar->setGeometry(QRect(0, 0, 800, 26));
         ChessClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ChessClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -88,7 +74,6 @@ public:
     void retranslateUi(QMainWindow *ChessClass)
     {
         ChessClass->setWindowTitle(QApplication::translate("ChessClass", "Chess", nullptr));
-        turns->setText(QApplication::translate("ChessClass", "TextLabel", nullptr));
     } // retranslateUi
 
 };

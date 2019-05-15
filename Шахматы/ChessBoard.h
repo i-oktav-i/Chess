@@ -28,11 +28,11 @@ public:
 
 	int getTurn() { return turnsCounter.getCount(); }
 
+	void restart();
+
 private:
 
 	Figures*** board;
-
-	bool playerColor;
 
 	TurnsCounter turnsCounter;
 

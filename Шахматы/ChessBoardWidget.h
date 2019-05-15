@@ -26,6 +26,7 @@ public:
 	int getTurn() { return board.getTurn(); }
 
 private:
+	
 	int currentSize;
 	int currentTileSize;
 	int horisontalOffsets;
@@ -40,9 +41,13 @@ private:
 	Figures* selectedPiece = nullptr;
 	bool whatPlayerTurn;
 
+
+	bool botColor;
+
 	pair<pair<int, int>, pair<int, int> > getBotTurn();
-	bool gameType;
-	QLabel turns;
+	int gmType;
+
+
 	//void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 	void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
