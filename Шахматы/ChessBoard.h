@@ -17,8 +17,9 @@ public:
 	ChessBoard();
 
 	~ChessBoard();
-	
+
 	const vector<Figures*> getFigures(bool) const;
+	const vector<Figures*> getFigures() const;
 	
 	Figures ** operator[] (int);
 

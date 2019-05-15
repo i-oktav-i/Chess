@@ -1,37 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Player" Collapsed="true">
-    <Position X="0.5" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAIAAAAQAAAAA=</HashCode>
-      <FileName>AIplayer.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="AIPlayer" Collapsed="true">
-    <Position X="0.5" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAgAAAAAAIAAAAgAEAAAAAAEAAAAAAAAA=</HashCode>
-      <FileName>AIplayer.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Move">
-    <Position X="11.5" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ABAAAAAAAIABAAAAAAAAAAABAAAAAAAAABAAAAAAAAA=</HashCode>
-      <FileName>AIplayer.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ChessBoard">
     <Position X="13.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAgAAAAAAgAAAAoIAAAAAAMAAAAAIAAAEAIAAAA=</HashCode>
+      <HashCode>AAIAABgAAAAAAgAAAAIIAAAAAAMAAAAAIAAAEAIAAAA=</HashCode>
       <FileName>ChessBoard.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Figures">
     <Position X="6.5" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>sAAOAMqAAAUAAACEAAAAAAAAIBAeAICCIAAkgQAAABA=</HashCode>
+      <HashCode>sAAOAMqAAgWAAACEAAAAAAAAIBAeAICCIAAkgQAAABA=</HashCode>
       <FileName>Figures.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -73,7 +52,7 @@
   <Class Name="King">
     <Position X="9.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAgAACEAAAAAAAEAAACAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAAAAgAACEAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Figures.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -94,7 +73,7 @@
   <Class Name="ChessBoardWidget">
     <Position X="15" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAABAAEAAAAAgNQAAADAFAAEQAAACIAIAAQJAAAA=</HashCode>
+      <HashCode>IACAABBAAEAAAAAgNQAAADAFAAEQAAACIAIAAQIAAEA=</HashCode>
       <FileName>ChessBoardWidget.h</FileName>
     </TypeIdentifier>
   </Class>

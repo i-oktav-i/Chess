@@ -41,12 +41,14 @@ private:
 	Figures* selectedPiece = nullptr;
 	bool whatPlayerTurn;
 
+	void restart();
 
 	bool botColor;
 
 	pair<pair<int, int>, pair<int, int> > getBotTurn();
-	int gmType;
+	int gameType;
 
+	int lastTurn;
 
 	//void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;

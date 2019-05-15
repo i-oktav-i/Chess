@@ -15,12 +15,14 @@ Figures::Figures(int _x, int _y, int _priority, bool _color, ChessBoard& _board,
 	yPos = _y;
 	color = _color;
 	priority = _priority;
+
 }
 
 bool Figures::move(int _x, int _y)
 {
 	if (checkMove(_x, _y) && !willBeOnCheck(_x, _y))
 	{
+		delete board[_x][_y];
 		setPos(_x, _y);
 		turnOfLastMove = ++turnsCounter;
 		++movesCounter;
@@ -28,12 +30,14 @@ bool Figures::move(int _x, int _y)
 		return true;
 	}
 	return false;
+
 }
 
 bool Figures::willBeOnCheck(int _x, int _y)
 {
 	Figures* piece = board[_x][_y];
 	int oldX = xPos, oldY = yPos;
+	int oldTurnOfLastMove = turnOfLastMove;
 	setPos(_x, _y);
 	turnOfLastMove = ++turnsCounter;
 	++movesCounter;
@@ -46,7 +50,8 @@ bool Figures::willBeOnCheck(int _x, int _y)
 		willBeOnCheck = board.getBlackKing()->isInDanger();
 
 	setPos(oldX, oldY);
-	turnOfLastMove = --turnsCounter;
+	turnOfLastMove = oldTurnOfLastMove;
+	--turnsCounter;
 	--movesCounter;
 	board[_x][_y] = piece;
 
@@ -57,6 +62,7 @@ bool Figures::willBeCheckmate(int _x, int _y)
 	Figures* piece = board[_x][_y];
 	int oldX = xPos, oldY = yPos;
 	setPos(_x, _y);
+	int oldTurnOfLastMove = turnOfLastMove;
 	turnOfLastMove = ++turnsCounter;
 	++movesCounter;
 
@@ -68,7 +74,8 @@ bool Figures::willBeCheckmate(int _x, int _y)
 		willBeCheckmate = board.getBlackKing()->havePossibleMoves() && board.getBlackKing()->isInDanger();
 
 	setPos(oldX, oldY);
-	turnOfLastMove = --turnsCounter;
+	turnOfLastMove = oldTurnOfLastMove;
+	--turnsCounter;
 	--movesCounter;
 	board[_x][_y] = piece;
 
@@ -110,8 +117,25 @@ bool Figures::isInDanger(int _x, int _y) const
 {
 	for (int x = 0; x < 8; ++x)
 		for (int y = 0; y < 8; ++y)
+		{
+			if (this == board.getWhiteKing() && board[x][y] == board.getBlackKing())
+			{
+
+				if (abs(xPos - board.getBlackKing()->getPos().first) == 2 && yPos - board.getBlackKing()->getPos().second == 0 || abs(yPos - board.getBlackKing()->getPos().second) == 2 && xPos - board.getBlackKing()->getPos().first == 0)
+					return true;
+				if (abs(xPos - board.getBlackKing()->getPos().first) == 1 && abs(yPos - board.getBlackKing()->getPos().second) == 1)
+					return true;
+			}
+			if (this == board.getBlackKing() && board[x][y] == board.getWhiteKing())
+			{
+				if (abs(xPos - board.getWhiteKing()->getPos().first) == 2 && yPos - board.getWhiteKing()->getPos().second == 0 || abs(yPos - board.getWhiteKing()->getPos().second) == 2 && xPos - board.getWhiteKing()->getPos().first == 0)
+					return true;
+				if (abs(xPos - board.getWhiteKing()->getPos().first) == 1 && abs(yPos - board.getWhiteKing()->getPos().second) == 1)
+					return true;
+			}
 			if (board[x][y] != nullptr && board[x][y]->getColor() != color && board[x][y] != this && board[x][y]->checkMove(_x, _y))
 				return true;
+		}
 	return false;
 }
 
@@ -163,13 +187,22 @@ bool Pawn::move(int _x, int _y)
 	if (Figures::move(_x, _y))
 	{
 		if (yPos == 7 || yPos == 0)
+		{
 			board[xPos][yPos] = new Queen(xPos, yPos, PRIORITY_QUEEN, color, board, turnsCounter);
+			delete this;
+		}
 
 		if (color && yPos == 5 && board[xPos][4] != nullptr && board[xPos][4]->getName() == "B_P" && board[xPos][4]->getMovesCounter() == 1)
+		{
+			delete board[xPos][4];
 			board[xPos][4] = nullptr;
+		}
 
 		if (!color && yPos == 2 && board[xPos][3] != nullptr && board[xPos][3]->getName() == "W_P" && board[xPos][3]->getMovesCounter() == 1)
+		{
+			delete board[xPos][3];
 			board[xPos][3] = nullptr;
+		}
 
 		return true;
 	}
@@ -587,12 +620,14 @@ bool King::move(int _x, int _y)
 	{
 		if (xPos == 2 && (yPos == 0 || yPos == 7) && movesCounter == 1)
 		{
-			board[3][yPos] = board[0][yPos];
+			board[3][yPos] = new Castle(3, yPos, board[0][yPos]->getPriority(), color, board, turnsCounter);
+			delete board[0][yPos];
 			board[0][yPos] = nullptr;
 		}
 		if (xPos == 6 && (yPos == 0 || yPos == 7) && movesCounter == 1)
 		{
-			board[5][yPos] = board[7][yPos];
+			board[5][yPos] = new Castle(5, yPos, board[7][yPos]->getPriority(), color, board, turnsCounter);
+			delete board[7][yPos];
 			board[7][yPos] = nullptr;
 		}
 
@@ -607,8 +642,10 @@ bool King::checkMove(int _x, int _y) const
 	if ((_x == xPos && _y == yPos) || _x >= 8 || _x < 0 || _y >= 8 || _y < 0)
 		return false;
 
-	if (abs(_x - xPos) <= 1 && abs(_y - yPos) <= 1 && (board[_x][_y] == nullptr || board[_x][_y]->getColor() != color) && !isInDanger(_x, _y))
-		return true;
+	if (abs(_x - xPos) <= 1 && abs(_y - yPos) <= 1)
+		if ((board[_x][_y] == nullptr || board[_x][_y]->getColor() != color))
+			if (!isInDanger(_x, _y))
+				return true;
 
 	if ((_x == 2 && longRoque() || _x == 6 && shortRoque()) && (_y == 0 || _y == 7))
 		return true;
@@ -616,36 +653,6 @@ bool King::checkMove(int _x, int _y) const
 	return false;
 }
 
-//vector<pair<int, int>> King::getPosibleMoves() const
-//{
-//	vector<pair<int, int>> moves;
-//
-//	if (checkMove(xPos + 1, yPos + 1))
-//		moves.push_back(pair<int, int>(xPos + 1, yPos + 1));
-//
-//	if (checkMove(xPos + 1, yPos))
-//		moves.push_back(pair<int, int>(xPos + 1, yPos));
-//
-//	if (checkMove(xPos + 1, yPos - 1))
-//		moves.push_back(pair<int, int>(xPos + 1, yPos - 1));
-//
-//	if (checkMove(xPos, yPos - 1))
-//		moves.push_back(pair<int, int>(xPos, yPos - 1));
-//
-//	if (checkMove(xPos - 1, yPos - 1))
-//		moves.push_back(pair<int, int>(xPos - 1, yPos - 1));
-//
-//	if (checkMove(xPos - 1, yPos))
-//		moves.push_back(pair<int, int>(xPos - 1, yPos));
-//
-//	if (checkMove(xPos - 1, yPos + 1))
-//		moves.push_back(pair<int, int>(xPos - 1, yPos + 1));
-//
-//	if (checkMove(xPos, yPos + 1))
-//		moves.push_back(pair<int, int>(xPos, yPos + 1));
-//
-//	return moves;
-//}
 
 bool King::longRoque() const
 {

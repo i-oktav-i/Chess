@@ -48,6 +48,22 @@ const vector<Figures*> ChessBoard::getFigures(bool _player) const
 	return figures;
 }
 
+const vector<Figures*> ChessBoard::getFigures() const
+{
+	vector<Figures*> figures;
+	for (int x = 0; x < 8; ++x)
+	{
+		for (int y = 0; y < 8; ++y)
+		{
+			if (board[x][y] != nullptr)
+				figures.push_back(board[x][y]);
+		}
+	}
+
+	return figures;
+}
+
+
 Figures** ChessBoard::operator[](int _index)
 {
 	return board[_index];

@@ -38,47 +38,53 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	pieceImages["B_C"] = sheet.copy(pieceWidth * 4, pieceHeight, pieceWidth, pieceHeight);
 	pieceImages["B_P"] = sheet.copy(pieceWidth * 5, pieceHeight, pieceWidth, pieceHeight);
 
+	lastTurn = 0;
 
+	restart();
+}
+
+
+void ChessBoardWidget::restart()
+{
+	board.restart();
 	QMessageBox choseType(this);
 	choseType.setText("Select game type");
 
 	QPushButton* PvP = choseType.addButton(tr("PvP"), QMessageBox::NoRole);
 	QPushButton* PvE = choseType.addButton(tr("PvE"), QMessageBox::NoRole);
-	QPushButton* EvE = choseType.addButton(tr("PvE"), QMessageBox::NoRole);
+	QPushButton* EvE = choseType.addButton(tr("EvE"), QMessageBox::NoRole);
 
-	gmType = choseType.exec();
+	gameType = choseType.exec();
 
-	if (gmType == 1)
+	if (gameType == 1)
 	{
 		QMessageBox whoFirst(this);
 		whoFirst.setText("Choose who goes first");
 		QPushButton* me = whoFirst.addButton(tr("Me"), QMessageBox::NoRole);
 		QPushButton* bot = whoFirst.addButton(tr("Bot"), QMessageBox::NoRole);
 		QPushButton* rng = whoFirst.addButton(tr("HOLY RANDOM!!!"), QMessageBox::NoRole);
-		
+
 		int reply = whoFirst.exec();
 		if (reply == 0)
 		{
-			whatPlayerTurn = true;
 			botColor = false;
 		}
 		else if (reply == 1)
 		{
-			whatPlayerTurn = false;
 			botColor = true;
 		}
 		else
 		{
 			srand(time(0));
 			whatPlayerTurn = rand() % 2;
-			botColor = !whatPlayerTurn;
 		}
-	}
-	else
+
 		whatPlayerTurn = true;
-
+	}
+	
+	
+	whatPlayerTurn = true;
 }
-
 
 pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 {
@@ -211,8 +217,25 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 	horisontalOffsets = (width() - currentSize) / 2;
 	verticalOffsets = (height() - 30 - currentSize) / 2 + 30;
 
-	if (whatPlayerTurn && !board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && !board.getBlackKing()->havePossibleMoves())
+	if (lastTurn != board.getTurn() && (whatPlayerTurn && !board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && !board.getBlackKing()->havePossibleMoves()))
+	{
+		if (whatPlayerTurn && board.getWhiteKing()->isInDanger())
+			QMessageBox::about(this, "End", "Black win!!!");
+		else if(!whatPlayerTurn && board.getBlackKing()->isInDanger())
+			QMessageBox::about(this, "End", "White win!!!");
+		else
+			QMessageBox::about(this, "End", "Draw!!!");
 		close();
+	}
+
+	if(board.getFigures().size() == 2)
+		QMessageBox::about(this, "End", "Draw!!!");
+
+
+	else
+	{
+		lastTurn = board.getTurn();
+	}
 
 	for (int x = 0; x < 8; x++) {
 		for (int y = 0; y < 8; y++) {
@@ -253,7 +276,7 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 	painter.drawText(width() / 2, 15, "Turn number: " + QString::number(board.getTurn()));
 
 
-	if (gmType == 1 && botColor != whatPlayerTurn)
+	if (gameType == 1 && botColor == whatPlayerTurn)
 	{
 		auto i = getBotTurn();
 		board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
@@ -267,7 +290,7 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent* _e)
 {
 	if (_e->button() == Qt::LeftButton)
 	{
-		if (gmType != 2)
+		if (gameType != 2)
 		{
 			int x = (_e->x() - horisontalOffsets) / currentTileSize;
 			int y = (_e->y() - verticalOffsets) / currentTileSize;
