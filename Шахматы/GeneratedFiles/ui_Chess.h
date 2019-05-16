@@ -10,9 +10,11 @@
 #define UI_CHESS_H
 
 #include <QtCore/QVariant>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -25,11 +27,13 @@ QT_BEGIN_NAMESPACE
 class Ui_ChessClass
 {
 public:
+    QAction *actionRestart;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     ChessBoardWidget *chessBoard;
     QGridLayout *gridLayout;
     QMenuBar *menuBar;
+    QMenu *menu;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -39,6 +43,8 @@ public:
             ChessClass->setObjectName(QString::fromUtf8("ChessClass"));
         ChessClass->resize(800, 800);
         ChessClass->setMinimumSize(QSize(0, 0));
+        actionRestart = new QAction(ChessClass);
+        actionRestart->setObjectName(QString::fromUtf8("actionRestart"));
         centralWidget = new QWidget(ChessClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -58,6 +64,8 @@ public:
         menuBar = new QMenuBar(ChessClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 800, 26));
+        menu = new QMenu(menuBar);
+        menu->setObjectName(QString::fromUtf8("menu"));
         ChessClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ChessClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -66,7 +74,11 @@ public:
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         ChessClass->setStatusBar(statusBar);
 
+        menuBar->addAction(menu->menuAction());
+        menu->addAction(actionRestart);
+
         retranslateUi(ChessClass);
+        QObject::connect(actionRestart, SIGNAL(triggered()), chessBoard, SLOT(restart()));
 
         QMetaObject::connectSlotsByName(ChessClass);
     } // setupUi
@@ -74,6 +86,8 @@ public:
     void retranslateUi(QMainWindow *ChessClass)
     {
         ChessClass->setWindowTitle(QApplication::translate("ChessClass", "Chess", nullptr));
+        actionRestart->setText(QApplication::translate("ChessClass", "Restart", nullptr));
+        menu->setTitle(QApplication::translate("ChessClass", "Game", nullptr));
     } // retranslateUi
 
 };

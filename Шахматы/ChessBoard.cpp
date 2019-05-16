@@ -17,6 +17,11 @@ ChessBoard::ChessBoard()
 	for (int i = 0; i < 8; ++i)
 	{
 		board[i] = new Figures*[8];
+		
+		for (int j = 0; j < 8; ++j)
+		{
+			board[i][j] = nullptr;
+		}
 	}
 	
 	restart();
@@ -74,7 +79,10 @@ void ChessBoard::restart()
 	for (int i = 0; i < 8; ++i)
 	{
 		for (int j = 0; j < 8; ++j)
+		{
+			delete board[i][j];
 			board[i][j] = nullptr;
+		}
 	}
 
 	for (int i = 0; i < 8; ++i)
@@ -108,4 +116,6 @@ void ChessBoard::restart()
 
 	whiteKing = board[4][0];
 	blackKing = board[4][7];
+
+	turnsCounter.setZero();
 }

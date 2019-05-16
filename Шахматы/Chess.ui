@@ -37,6 +37,13 @@
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Game</string>
+    </property>
+    <addaction name="actionRestart"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -47,6 +54,11 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionRestart">
+   <property name="text">
+    <string>Restart</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -55,10 +67,30 @@
    <extends>QWidget</extends>
    <header location="global">chessboardwidget.h</header>
    <container>1</container>
+   <slots>
+    <slot>restart()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
   <include location="Chess.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionRestart</sender>
+   <signal>triggered()</signal>
+   <receiver>chessBoard</receiver>
+   <slot>restart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -7,6 +7,7 @@ public:
 	int getCount() const { return count; }
 	int operator++() { return ++count; }
 	int operator--() { return --count; }
+	void setZero() { count = 0; }
 private:
 
 	int count;

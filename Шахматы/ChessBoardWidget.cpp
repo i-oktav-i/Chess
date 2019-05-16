@@ -38,14 +38,14 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent)
 	pieceImages["B_C"] = sheet.copy(pieceWidth * 4, pieceHeight, pieceWidth, pieceHeight);
 	pieceImages["B_P"] = sheet.copy(pieceWidth * 5, pieceHeight, pieceWidth, pieceHeight);
 
-	lastTurn = 0;
-
 	restart();
 }
 
 
 void ChessBoardWidget::restart()
 {
+	gameEnd = false;
+	selectedPiece = nullptr;
 	board.restart();
 	QMessageBox choseType(this);
 	choseType.setText("Select game type");
@@ -76,14 +76,14 @@ void ChessBoardWidget::restart()
 		else
 		{
 			srand(time(0));
-			whatPlayerTurn = rand() % 2;
+			botColor = rand() % 2;
 		}
-
-		whatPlayerTurn = true;
 	}
 	
 	
 	whatPlayerTurn = true;
+	lastTurn = 0;
+	gameEnd = true;
 }
 
 pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
@@ -151,6 +151,18 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 	if (maxValue != -100)
 		return bestMove;
 
+	Figures* king;
+	if (whatPlayerTurn)
+		king = board.getWhiteKing();
+	else
+		king = board.getBlackKing();
+
+	if (king->isInDanger())
+	{
+		srand(time(0));
+		return allMoves[rand() % allMoves.size()];
+	}
+
 	maxValue = 100;
 
 	for (auto i : allMoves)
@@ -184,23 +196,29 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 		}
 	}
 	
-	maxValue = -6;
+	float bestPos = -6.0;
 
 	vector <pair<pair<int, int>, pair<int, int> > > random;
 
 	for (auto i : useless)
 	{
-		if (board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second) > maxValue)
+		if (board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second) > bestPos)
 		{
-			maxValue = board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second);
+			bestPos = board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second);
 		}
 	}
 
-	for (auto i : useless)
+	while (random.size() == 0)
 	{
-		if (board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second) == maxValue)
+		for (auto i : useless)
 		{
-			random.push_back(i);
+			srand(time(0));
+			float noize = (float)((rand() % 6000) + 9000) / 1000;
+
+			if (board[i.first.first][i.first.second]->getPosPriority(i.second.first, i.second.second) * noize >= bestPos)
+			{
+				random.push_back(i);
+			}
 		}
 	}
 
@@ -210,6 +228,30 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 
 void ChessBoardWidget::paintEvent(QPaintEvent*)
 {
+	if(gameEnd)
+		if ((lastTurn != board.getTurn() && (whatPlayerTurn && !board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && !board.getBlackKing()->havePossibleMoves())))
+		{
+			gameEnd = false;
+			if (whatPlayerTurn && board.getWhiteKing()->isInDanger())
+				QMessageBox::about(this, "End", "Black win!!!");
+			else if (!whatPlayerTurn && board.getBlackKing()->isInDanger())
+				QMessageBox::about(this, "End", "White win!!!");
+			else
+				QMessageBox::about(this, "End", "Draw!!!");
+			restart();
+		}
+		else
+		{
+			lastTurn = board.getTurn();
+		}
+
+	if (gameEnd && board.getFigures().size() == 2)
+	{
+		gameEnd = false;
+		QMessageBox::about(this, "End", "Draw!!!");
+	}
+
+
 	QPainter painter(this);
 
 	currentSize = width() < (height() - 30) ? width() : (height() - 30);
@@ -217,32 +259,21 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 	horisontalOffsets = (width() - currentSize) / 2;
 	verticalOffsets = (height() - 30 - currentSize) / 2 + 30;
 
-	if (lastTurn != board.getTurn() && (whatPlayerTurn && !board.getWhiteKing()->havePossibleMoves() || !whatPlayerTurn && !board.getBlackKing()->havePossibleMoves()))
-	{
-		if (whatPlayerTurn && board.getWhiteKing()->isInDanger())
-			QMessageBox::about(this, "End", "Black win!!!");
-		else if(!whatPlayerTurn && board.getBlackKing()->isInDanger())
-			QMessageBox::about(this, "End", "White win!!!");
-		else
-			QMessageBox::about(this, "End", "Draw!!!");
-		close();
-	}
-
-	if(board.getFigures().size() == 2)
-		QMessageBox::about(this, "End", "Draw!!!");
-
-
-	else
-	{
-		lastTurn = board.getTurn();
-	}
-
 	for (int x = 0; x < 8; x++) {
 		for (int y = 0; y < 8; y++) {
 
-			painter.setBrush((x + y) % 2 == 1 ? brushBlack : brushWhite);
+			if ((x + y) % 2 == 1)
+				painter.setBrush(brushBlack);
+			else
+				painter.setBrush(brushWhite);
 
-			painter.drawRect(x * currentTileSize + horisontalOffsets, y * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
+			//painter.setBrush((x + y) % 2 == 1 ? brushBlack : brushWhite);
+
+			int _X = x * currentTileSize + horisontalOffsets;
+			int _Y = y * currentTileSize + verticalOffsets;
+			//painter.drawRect(x * currentTileSize + horisontalOffsets, y * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
+
+			painter.drawRect(_X, _Y, currentTileSize, currentTileSize);
 
 			if (board[x][y] == board.getBlackKing() && board.getBlackKing()->isInDanger())
 			{
@@ -268,7 +299,7 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 		for (auto i : selectedPiece->getPosibleMoves())
 			if (!selectedPiece->willBeOnCheck(i.first, i.second))
 				painter.drawRect(i.first * currentTileSize + horisontalOffsets, (7 - i.second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize);
-		
+
 		painter.setOpacity(0.2);
 		painter.drawImage(QRect(selectedPiece->getPos().first * currentTileSize + horisontalOffsets, (7 - selectedPiece->getPos().second) * currentTileSize + verticalOffsets, currentTileSize, currentTileSize), pieceImages[selectedPiece->getName()]);
 		painter.setOpacity(1);
@@ -276,13 +307,14 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 	painter.drawText(width() / 2, 15, "Turn number: " + QString::number(board.getTurn()));
 
 
-	if (gameType == 1 && botColor == whatPlayerTurn)
+	if (gameEnd && gameType == 1 && botColor == whatPlayerTurn)
 	{
 		auto i = getBotTurn();
 		board[i.first.first][i.first.second]->move(i.second.first, i.second.second);
 		whatPlayerTurn = !whatPlayerTurn;
 		update();
 	}
+
 }
 
 

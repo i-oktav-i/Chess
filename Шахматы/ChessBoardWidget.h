@@ -41,7 +41,6 @@ private:
 	Figures* selectedPiece = nullptr;
 	bool whatPlayerTurn;
 
-	void restart();
 
 	bool botColor;
 
@@ -50,8 +49,12 @@ private:
 
 	int lastTurn;
 
-	//void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+	bool gameEnd;
+
 	void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 	void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-	//void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+
+public slots:
+
+	void restart();
 };
