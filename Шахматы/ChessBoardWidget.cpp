@@ -110,20 +110,23 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 
 		if (board[i.second.first][i.second.second] != nullptr)
 			eatPeaceMoves.push_back(i);
-		else if (board[i.first.first][i.first.second]->getName() == "W_P" ||
-			board[i.first.first][i.first.second]->getName() == "B_P")
+		else if (board[i.first.first][i.first.second]->getName() == "W_P" && 
+			board[i.first.first][i.first.second]->getPos().second == 4 
+			||
+			board[i.first.first][i.first.second]->getName() == "B_P" &&
+			board[i.first.first][i.first.second]->getPos().second == 3)
 		{
 			Figures* peace = board[i.first.first][i.first.second];
-			if (peace->getColor() && peace->getPos().second == 5 &&
-				board[peace->getPos().first][4] != nullptr &&
-				board[peace->getPos().first][4]->getName() == "B_P" &&
-				board[peace->getPos().first][4]->getMovesCounter() == 1)
+			if (peace->getColor() &&
+				board[i.second.first][4] != nullptr &&
+				board[i.second.first][4]->getName() == "B_P" &&
+				board[i.second.first][4]->getMovesCounter() == 1)
 				eatPeaceMoves.push_back(i);
 
-			if (!peace->getColor() && peace->getPos().second == 2 &&
-				board[peace->getPos().first][3] != nullptr &&
-				board[peace->getPos().first][3]->getName() == "W_P" &&
-				board[peace->getPos().first][3]->getMovesCounter() == 1)
+			if (!peace->getColor() &&
+				board[i.second.first][3] != nullptr &&
+				board[i.second.first][3]->getName() == "W_P" &&
+				board[i.second.first][3]->getMovesCounter() == 1)
 				eatPeaceMoves.push_back(i);
 		}
 	}
@@ -132,19 +135,50 @@ pair<pair<int, int>, pair<int, int> > ChessBoardWidget::getBotTurn()
 
 	for (auto i : eatPeaceMoves)
 	{
-		if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+		if (board[i.first.first][i.first.second]->getName() == "W_P" &&
+			board[i.first.first][i.first.second]->getPos().second == 4
+			||
+			board[i.first.first][i.first.second]->getName() == "B_P" &&
+			board[i.first.first][i.first.second]->getPos().second == 3)
 		{
-			if (board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority() > maxValue)
-			{
-				maxValue = board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority();
-				bestMove = i;
-			}
+			Figures* peace = board[i.first.first][i.first.second];
+			if ((peace->getColor() &&
+				board[i.second.first][4] != nullptr &&
+				board[i.second.first][4]->getName() == "B_P" &&
+				board[i.second.first][4]->getMovesCounter() == 1)
+				||
+				(!peace->getColor() &&
+					board[i.second.first][3] != nullptr &&
+					board[i.second.first][3]->getName() == "W_P" &&
+					board[i.second.first][3]->getMovesCounter() == 1))
+				if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+				{
+					if (maxValue < 0)
+					{
+						maxValue = 0;
+						bestMove = i;
+					}
+				}
+				else if (board[i.first.first][i.first.second]->getPriority() > maxValue)
+				{
+					maxValue = board[i.first.first][i.first.second]->getPriority();
+					bestMove = i;
+				}
 		}
 		else
-		{
-			maxValue = board[i.second.first][i.second.second]->getPriority();
-			bestMove = i;
-		}
+			if (board[i.first.first][i.first.second]->isInDanger(i.second.first, i.second.second))
+			{
+				if (board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority() > maxValue)
+				{
+					maxValue = board[i.second.first][i.second.second]->getPriority() - board[i.first.first][i.first.second]->getPriority();
+					bestMove = i;
+				}
+			}
+			else if (board[i.second.first][i.second.second]->getPriority() > maxValue)
+			{
+				maxValue = board[i.second.first][i.second.second]->getPriority();
+				bestMove = i;
+			}
 	}
 
 
